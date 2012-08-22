@@ -4,7 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="600"
+    d:DesignHeight="600" d:DesignWidth="800"
     Name="uc_main">
 
     <Grid x:Name="LayoutRoot" Background="White">
@@ -29,10 +29,11 @@
             </ListBox>
         </StackPanel>
         <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto">
-            <Canvas Name="c_blue" 
+            <Canvas Name="canvasNodeDisplay" 
                     Background="SeaGreen"
-                    Height="800"
-                    Width="600"></Canvas>
+                    Height="500"
+                    Width="300">
+            </Canvas>
         </ScrollViewer>
         <StackPanel Grid.Column="2">
             <TextBlock Name="tb_x"></TextBlock>
