@@ -7,9 +7,9 @@
 
     <StackPanel>
         <Rectangle Name="top_part" Height="80" Width="60" Fill="Blue"></Rectangle>
-        <StackPanel Name="bottom_part">
+        <StackPanel>
             <Line Height="10" Stroke="Black" StrokeThickness="4" ></Line>
-            <Ellipse Height="20" Width="20" Fill="Red"></Ellipse>
+            <Ellipse Name="bottom_part" Height="20" Width="20" Fill="Red"></Ellipse>
         </StackPanel>
     </StackPanel>
 </UserControl>

@@ -31,8 +31,10 @@
         <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto">
             <Canvas Name="canvasNodeDisplay" 
                     Background="SeaGreen"
-                    Height="500"
-                    Width="300">
+                    Height="800"
+                    Width="700"
+                    MouseMove="canvasNodeDisplay_MouseMove"
+                    MouseLeftButtonUp="canvasNodeDisplay_MouseLeftButtonUp">
             </Canvas>
         </ScrollViewer>
         <StackPanel Grid.Column="2">
