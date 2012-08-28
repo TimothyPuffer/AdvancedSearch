@@ -6,9 +6,10 @@
     mc:Ignorable="d">
 
     <StackPanel>
-        <Rectangle Name="top_part" Height="80" Width="60" Fill="Blue"></Rectangle>
+        <StackPanel Name="top_part">
+            <Image Name="iNodeImage" Margin="0,10,0,0"></Image>
+        </StackPanel>
         <StackPanel>
-            <Line Height="10" Stroke="Black" StrokeThickness="4" ></Line>
             <Ellipse Name="bottom_part" Height="20" Width="20" Fill="Red"></Ellipse>
         </StackPanel>
     </StackPanel>

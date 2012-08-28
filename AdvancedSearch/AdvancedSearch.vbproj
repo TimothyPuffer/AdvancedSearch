@@ -132,11 +132,12 @@
     <None Include="My Project\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Info.png" />
+    <Resource Include="Images\Picture.png" />
+    <Resource Include="Images\Profile.png" />
     <Content Include="TextFile1.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

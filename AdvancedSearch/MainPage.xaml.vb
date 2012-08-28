@@ -116,7 +116,7 @@
     End Sub
 
     Private Sub AddNode(ByVal nodetype As ResourceProvider.ResourceInfo, ByVal p As Point)
-        Dim node As Node_UC = New Node_UC()
+        Dim node As Node_UC = New Node_UC(nodetype.DisplayObject)
         canvasNodeDisplay.Children.Add(node)
 
         node.SetValue(Canvas.TopProperty, p.Y)

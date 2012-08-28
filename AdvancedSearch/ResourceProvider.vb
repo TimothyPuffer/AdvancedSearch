@@ -50,9 +50,9 @@
     Private Shared Sub FillResourceInfo()
         If _resourcelookup Is Nothing Then
             _resourcelookup = New Dictionary(Of ResourceType, ResourceInfo)
-            _resourcelookup.Add(ResourceType.Account, New ResourceInfo("Account", Nothing))
-            _resourcelookup.Add(ResourceType.Service, New ResourceInfo("Service", Nothing))
-            _resourcelookup.Add(ResourceType.Member, New ResourceInfo("Member", Nothing))
+            _resourcelookup.Add(ResourceType.Account, New ResourceInfo("Account", "Images/Info.png"))
+            _resourcelookup.Add(ResourceType.Service, New ResourceInfo("Service", "Images/Picture.png"))
+            _resourcelookup.Add(ResourceType.Member, New ResourceInfo("Member", "Images/Profile.png"))
         End If
     End Sub
 

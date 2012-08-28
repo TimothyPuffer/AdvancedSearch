@@ -2,6 +2,15 @@
 Partial Public Class Node_UC
     Inherits UserControl
 
+    Enum NodeStateEnum
+        Normal
+        Selected
+        CanDrop
+        NoDrop
+        ErrorState
+        ErrorStateSelected
+    End Enum
+
     Public Event NodeSelected(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ConnectorMouseLeftButtonDown(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event NodeDroppedOn(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -9,8 +18,20 @@ Partial Public Class Node_UC
 
     Public Property AllowMove As Boolean
 
-    Public Sub New()
+    Dim _NodeState As NodeStateEnum = NodeStateEnum.Normal
+    Public Property NodeState() As NodeStateEnum
+        Get
+            Return _NodeState
+        End Get
+        Set(ByVal Value As NodeStateEnum)
+            _NodeState = Value
+            SetNodeState()
+        End Set
+    End Property
+
+    Public Sub New(ByVal imagePath As String)
         InitializeComponent()
+        iNodeImage.Source = New System.Windows.Media.Imaging.BitmapImage(New Uri(imagePath, UriKind.Relative))
         AllowMove = True
         AddHandler top_part.MouseLeftButtonDown, AddressOf Node_MouseLeftButtonDown
         AddHandler top_part.MouseMove, AddressOf Node_MouseMove
@@ -67,6 +88,12 @@ Partial Public Class Node_UC
         Else
             RaiseEvent NodeDroppedOn(Me, e)
         End If
+    End Sub
+#End Region
+
+#Region "Private Methods"
+    Private Sub SetNodeState()
+
     End Sub
 #End Region
 
