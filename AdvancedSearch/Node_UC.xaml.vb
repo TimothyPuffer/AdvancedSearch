@@ -97,4 +97,11 @@ Partial Public Class Node_UC
     End Sub
 #End Region
 
+    Private Sub bottom_part_MouseEnter(sender As System.Object, e As System.Windows.Input.MouseEventArgs)
+        testcolor.Opacity = 1
+    End Sub
+
+    Private Sub bottom_part_MouseLeave(sender As System.Object, e As System.Windows.Input.MouseEventArgs)
+        testcolor.Opacity = 0.7
+    End Sub
 End Class

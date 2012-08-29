@@ -34,10 +34,9 @@
         canvasNodeDisplay.Children.Add(_tmpConnectingLine)
 
         SetLineStartToCenter(_tmpConnectingLine, sender.bottom_part)
-
-
         _tmpConnectingLine.X2 = _tmpConnectingLine.X1
         _tmpConnectingLine.Y2 = _tmpConnectingLine.Y1
+
         _tmpConnectingLine.Stroke = New SolidColorBrush(Colors.Black)
         Canvas.SetZIndex(_tmpConnectingLine, -100)
         _tmpConnectingLine.StrokeThickness = 4
@@ -86,8 +85,11 @@
 
     Private Sub canvasNodeDisplay_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs)
         If _tmpConnectingLine IsNot Nothing Then
+
             _tmpConnectingLine.X2 = e.GetPosition(canvasNodeDisplay).X
             _tmpConnectingLine.Y2 = e.GetPosition(canvasNodeDisplay).Y
+            SetLineStartToCenter(_tmpConnectingLine, _tmpConnectingNode.bottom_part)
+
         End If
     End Sub
 
@@ -103,17 +105,64 @@
 
 #Region "Private Methods"
 
+    Private Function GetTangentOffset(l As Line, circle As FrameworkElement) As Point
+
+        Dim radius = circle.ActualHeight / 2 - 2
+
+        Dim offset = circle.TransformToVisual(canvasNodeDisplay).Transform(New Point(radius, radius))
+        Dim y As Double = offset.Y - l.Y2
+        Dim x As Double = offset.X - l.X2
+
+
+        If y = 0 Then
+            Return New Point(radius, 0)
+        ElseIf x = 0 Then
+            Return New Point(0, radius)
+        End If
+        Dim slope = Math.Abs(y / x)
+        Dim theta = Math.Atan(slope)
+
+        Dim newY = radius * Math.Sin(Math.PI / 2 - theta)
+        Dim newX = radius * Math.Sin(theta)
+
+        If y < 0 Then
+            newX = newX * -1
+        End If
+        If x < 0 Then
+            newY = newY * -1
+        End If
+
+        Return New Point(newY * -1, newX * -1)
+
+    End Function
+
     Private Sub SetLineStartToCenter(ByVal cline As Line, ByVal toCenterFrameworkElement As FrameworkElement)
         Dim offset = toCenterFrameworkElement.TransformToVisual(canvasNodeDisplay).Transform(New Point(0, 0))
-        cline.X1 = offset.X + toCenterFrameworkElement.ActualHeight / 2
-        cline.Y1 = offset.Y + toCenterFrameworkElement.ActualWidth / 2
+        Dim tangentoffset = GetTangentOffset(cline, toCenterFrameworkElement)
+        cline.X1 = offset.X + tangentoffset.X + toCenterFrameworkElement.ActualHeight / 2
+        cline.Y1 = offset.Y + tangentoffset.Y + toCenterFrameworkElement.ActualWidth / 2
     End Sub
 
     Private Sub SetLineEndToCenter(ByVal cline As Line, ByVal toCenterFrameworkElement As FrameworkElement)
         Dim offset = toCenterFrameworkElement.TransformToVisual(canvasNodeDisplay).Transform(New Point(0, 0))
+
+        Dim lineStartNode As Node_UC = GetStartNode(cline)
+        If lineStartNode IsNot Nothing Then
+            SetLineStartToCenter(cline, lineStartNode.bottom_part)
+        End If
+
         cline.X2 = offset.X + toCenterFrameworkElement.ActualHeight / 2
         cline.Y2 = offset.Y + toCenterFrameworkElement.ActualWidth / 2
     End Sub
+
+    Private Function GetStartNode(ByVal cline) As Node_UC
+        For Each kv In _nodeListTop
+            If kv.Value.Contains(cline) Then
+                Return kv.Key
+            End If
+        Next
+        Return Nothing
+    End Function
 
     Private Sub AddNode(ByVal nodetype As ResourceProvider.ResourceInfo, ByVal p As Point)
         Dim node As Node_UC = New Node_UC(nodetype.DisplayObject)
