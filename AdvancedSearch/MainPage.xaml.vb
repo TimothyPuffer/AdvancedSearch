@@ -122,17 +122,17 @@
         Dim slope = Math.Abs(y / x)
         Dim theta = Math.Atan(slope)
 
-        Dim newY = radius * Math.Sin(Math.PI / 2 - theta)
-        Dim newX = radius * Math.Sin(theta)
+        Dim newX = radius * Math.Sin(Math.PI / 2 - theta)
+        Dim newY = radius * Math.Sin(theta)
 
-        If y < 0 Then
+        If x < 0 Then
             newX = newX * -1
         End If
-        If x < 0 Then
+        If y < 0 Then
             newY = newY * -1
         End If
 
-        Return New Point(newY * -1, newX * -1)
+        Return New Point(newX * -1, newY * -1)
 
     End Function
 
