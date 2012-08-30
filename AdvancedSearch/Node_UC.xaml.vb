@@ -2,32 +2,12 @@
 Partial Public Class Node_UC
     Inherits UserControl
 
-    Enum NodeStateEnum
-        Normal
-        Selected
-        CanDrop
-        NoDrop
-        ErrorState
-        ErrorStateSelected
-    End Enum
-
     Public Event NodeSelected(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ConnectorMouseLeftButtonDown(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event NodeDroppedOn(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event NodeMove(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseEventArgs)
 
     Public Property AllowMove As Boolean
-
-    Dim _NodeState As NodeStateEnum = NodeStateEnum.Normal
-    Public Property NodeState() As NodeStateEnum
-        Get
-            Return _NodeState
-        End Get
-        Set(ByVal Value As NodeStateEnum)
-            _NodeState = Value
-            SetNodeState()
-        End Set
-    End Property
 
     Public Sub New(ByVal imagePath As String)
         InitializeComponent()
@@ -36,9 +16,10 @@ Partial Public Class Node_UC
         AddHandler top_part.MouseLeftButtonDown, AddressOf Node_MouseLeftButtonDown
         AddHandler top_part.MouseMove, AddressOf Node_MouseMove
         AddHandler top_part.MouseLeftButtonUp, AddressOf Node_MouseLeftButtonUp
-
         AddHandler bottom_part.MouseLeftButtonDown, AddressOf BottomPartMouseLeftButtonDown
 
+        LoadNodeDisplayMap()
+        UpdateNodeDisplayState()
     End Sub
 
 
@@ -91,12 +72,7 @@ Partial Public Class Node_UC
     End Sub
 #End Region
 
-#Region "Private Methods"
-    Private Sub SetNodeState()
-
-    End Sub
-#End Region
-
+#Region "bottom_part mouseEnter mouseLeave"
     Private Sub bottom_part_MouseEnter(sender As System.Object, e As System.Windows.Input.MouseEventArgs)
         testcolor.Opacity = 1
     End Sub
@@ -104,4 +80,66 @@ Partial Public Class Node_UC
     Private Sub bottom_part_MouseLeave(sender As System.Object, e As System.Windows.Input.MouseEventArgs)
         testcolor.Opacity = 0.7
     End Sub
+#End Region
+
+    Protected Class NodeDisplayMap
+        Public Property State As ResourceProvider.NodeDisplayState
+        Public Property DefaultOpacity As Double
+        Public Property MouseOverOpacity As Double
+        Public Property Color As System.Windows.Media.Color
+    End Class
+
+    Dim _nodeDisplayMapList As List(Of NodeDisplayMap)
+    Dim _nodeDisplayState As ResourceProvider.NodeDisplayState = ResourceProvider.NodeDisplayState.Normal
+    Dim _isOverTopPart As Boolean = False
+    Dim _isSelected As Boolean = False
+
+    Private Sub LoadNodeDisplayMap()
+        If _nodeDisplayMapList Is Nothing Then
+            _nodeDisplayMapList = New List(Of NodeDisplayMap)
+            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ResourceProvider.NodeDisplayState.Normal, .DefaultOpacity = 0, .MouseOverOpacity = 0.7, .Color = Colors.Blue})
+            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ResourceProvider.NodeDisplayState.CanDrop, .DefaultOpacity = 0.8, .MouseOverOpacity = 1, .Color = Colors.Green})
+            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ResourceProvider.NodeDisplayState.NotDrop, .DefaultOpacity = 0.8, .MouseOverOpacity = 0.9, .Color = Colors.Black})
+            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ResourceProvider.NodeDisplayState.ErrorState, .DefaultOpacity = 0.8, .MouseOverOpacity = 0.9, .Color = Colors.Red})
+        End If
+    End Sub
+
+    Public Sub SetNodeDisplayState(ByVal state As ResourceProvider.NodeDisplayState)
+        _nodeDisplayState = state
+        UpdateNodeDisplayState()
+    End Sub
+
+    Public Sub SetIsSelected(ByVal state As Boolean)
+        _isSelected = state
+        If _isSelected Then
+            boarder.BorderBrush = New SolidColorBrush(Colors.Gray)
+        Else
+            boarder.BorderBrush = New SolidColorBrush(Colors.Transparent)
+        End If
+    End Sub
+
+    Private Sub UpdateNodeDisplayState()
+        backgroundColor.Color = _nodeDisplayMapList.First(Function(n) n.State = _nodeDisplayState).Color
+        UpdateBackgroundHighlightOpacity()
+    End Sub
+
+    Private Sub UpdateBackgroundHighlightOpacity()
+        Dim currentNodeDisplayState = _nodeDisplayMapList.First(Function(n) n.State = _nodeDisplayState)
+        If _isOverTopPart Then
+            backgroundHighlight.Opacity = currentNodeDisplayState.MouseOverOpacity
+        Else
+            backgroundHighlight.Opacity = currentNodeDisplayState.DefaultOpacity
+        End If
+    End Sub
+
+    Private Sub top_part_MouseEnter(sender As System.Object, e As System.Windows.Input.MouseEventArgs)
+        _isOverTopPart = True
+        UpdateBackgroundHighlightOpacity()
+    End Sub
+
+    Private Sub top_part_MouseLeave(sender As System.Object, e As System.Windows.Input.MouseEventArgs)
+        _isOverTopPart = False
+        UpdateBackgroundHighlightOpacity()
+    End Sub
+
 End Class

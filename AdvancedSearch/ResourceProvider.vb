@@ -6,6 +6,21 @@
         Member
     End Enum
 
+    Enum NodeDisplayState
+        Normal
+        CanDrop
+        NotDrop
+        ErrorState
+    End Enum
+
+    Enum ConnectorDisplayState
+        Connecting
+        Normal
+        Selected
+        ErrorState
+        ErrorStateSelected
+    End Enum
+
     Public Class ResourceInfo
         Dim _displayName As String
         Dim _displayObject As Object

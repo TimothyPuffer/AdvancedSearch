@@ -19,7 +19,10 @@
     End Sub
 
     Private Sub Node_Selected(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
-
+        For Each n In _nodeListTop
+            n.Key.SetIsSelected(False)
+        Next
+        sender.SetIsSelected(True)
     End Sub
 
 #End Region
@@ -190,4 +193,22 @@
 
 #End Region
 
+    Private Sub Button_Click_1(sender As System.Object, e As System.Windows.RoutedEventArgs)
+        Dim b As Button = sender
+        Dim s As ResourceProvider.NodeDisplayState = ResourceProvider.NodeDisplayState.Normal
+        If b.Tag = "0" Then
+            s = ResourceProvider.NodeDisplayState.CanDrop
+        ElseIf b.Tag = "1" Then
+            s = ResourceProvider.NodeDisplayState.ErrorState
+        ElseIf b.Tag = "3" Then
+            s = ResourceProvider.NodeDisplayState.Normal
+        ElseIf b.Tag = "4" Then
+            s = ResourceProvider.NodeDisplayState.NotDrop
+        End If
+
+        For Each n In _nodeListTop
+            n.Key.SetNodeDisplayState(s)
+        Next
+
+    End Sub
 End Class
