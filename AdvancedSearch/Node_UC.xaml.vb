@@ -9,6 +9,11 @@ Partial Public Class Node_UC
 
     Public Property AllowMove As Boolean
 
+    Public Sub SetIsSelected(ByVal state As Boolean)
+        UpadateIsSelected(state)
+    End Sub
+
+
     Public Sub New(ByVal imagePath As String)
         InitializeComponent()
         iNodeImage.Source = New System.Windows.Media.Imaging.BitmapImage(New Uri(imagePath, UriKind.Relative))
@@ -22,10 +27,13 @@ Partial Public Class Node_UC
         UpdateNodeDisplayState()
     End Sub
 
+#Region "bottom_part Events"
 
     Private Sub BottomPartMouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
         RaiseEvent ConnectorMouseLeftButtonDown(Me, e)
     End Sub
+
+#End Region
 
 #Region "top part mouse handles"
     Dim isMouseCaptured As Boolean
@@ -82,6 +90,8 @@ Partial Public Class Node_UC
     End Sub
 #End Region
 
+#Region "Node Dislay state mouse over and background map"
+
     Protected Class NodeDisplayMap
         Public Property State As ResourceProvider.NodeDisplayState
         Public Property DefaultOpacity As Double
@@ -109,7 +119,7 @@ Partial Public Class Node_UC
         UpdateNodeDisplayState()
     End Sub
 
-    Public Sub SetIsSelected(ByVal state As Boolean)
+    Private Sub UpadateIsSelected(ByVal state As Boolean)
         _isSelected = state
         If _isSelected Then
             boarder.BorderBrush = New SolidColorBrush(Colors.Gray)
@@ -141,5 +151,7 @@ Partial Public Class Node_UC
         _isOverTopPart = False
         UpdateBackgroundHighlightOpacity()
     End Sub
+
+#End Region
 
 End Class
