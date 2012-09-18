@@ -3,6 +3,9 @@
 
     Private Shared ReadOnly __DefaultNodePosition As New Point(10, 10)
 
+    Dim _manager As New ASNodeManager
+    Dim _resourceProvider As ResourceProvider
+
     Dim _nodeListTop As New Dictionary(Of Node_UC, List(Of Line))
     Dim _nodeListBot As New Dictionary(Of Node_UC, List(Of Line))
 
@@ -10,7 +13,6 @@
         InitializeComponent()
         InitializeSources()
     End Sub
-
 
 #Region "Events"
 
@@ -23,6 +25,11 @@
             n.Key.SetIsSelected(False)
         Next
         sender.SetIsSelected(True)
+    End Sub
+
+    Private Sub lb_ResourceType_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs)
+        Dim _selectedResourceInfo As ResourceProvider.ResourceInfo = CType(lb_ResourceType.SelectedItem, ResourceProvider.ResourceInfo)
+        btn_AddNode.IsEnabled = _manager.CanAddNodeType(_selectedResourceInfo.ResourceType)
     End Sub
 
 #End Region
@@ -187,23 +194,29 @@
     End Sub
 
     Private Sub InitializeSources()
-        lb_ResourceType.ItemsSource = ResourceProvider.GetResourceInfos()
-        lb_ResourceType.SelectedItem = ResourceProvider.GetResourceInfos().First()
+        Dim _proxyLookup As New Dictionary(Of Integer, String)
+        _proxyLookup.Add(1, "Account")
+        _proxyLookup.Add(2, "Service")
+        _proxyLookup.Add(3, "Member")
+
+        _resourceProvider = New ResourceProvider(_proxyLookup)
+        lb_ResourceType.ItemsSource = _resourceProvider.GetResourceInfos()
+        lb_ResourceType.SelectedItem = _resourceProvider.GetResourceInfos().First()
     End Sub
 
 #End Region
 
     Private Sub Button_Click_1(sender As System.Object, e As System.Windows.RoutedEventArgs)
         Dim b As Button = sender
-        Dim s As ResourceProvider.NodeDisplayState = ResourceProvider.NodeDisplayState.Normal
+        Dim s As ASNodeDisplayState = ASNodeDisplayState.Normal
         If b.Tag = "0" Then
-            s = ResourceProvider.NodeDisplayState.CanDrop
+            s = ASNodeDisplayState.CanDrop
         ElseIf b.Tag = "1" Then
-            s = ResourceProvider.NodeDisplayState.ErrorState
+            s = ASNodeDisplayState.ErrorState
         ElseIf b.Tag = "3" Then
-            s = ResourceProvider.NodeDisplayState.Normal
+            s = ASNodeDisplayState.Normal
         ElseIf b.Tag = "4" Then
-            s = ResourceProvider.NodeDisplayState.NotDrop
+            s = ASNodeDisplayState.NotDrop
         End If
 
         For Each n In _nodeListTop
@@ -211,4 +224,5 @@
         Next
 
     End Sub
+
 End Class

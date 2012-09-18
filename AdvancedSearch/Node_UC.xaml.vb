@@ -93,28 +93,28 @@ Partial Public Class Node_UC
 #Region "Node Dislay state mouse over and background map"
 
     Protected Class NodeDisplayMap
-        Public Property State As ResourceProvider.NodeDisplayState
+        Public Property State As ASNodeDisplayState
         Public Property DefaultOpacity As Double
         Public Property MouseOverOpacity As Double
         Public Property Color As System.Windows.Media.Color
     End Class
 
     Dim _nodeDisplayMapList As List(Of NodeDisplayMap)
-    Dim _nodeDisplayState As ResourceProvider.NodeDisplayState = ResourceProvider.NodeDisplayState.Normal
+    Dim _nodeDisplayState As ASNodeDisplayState = ASNodeDisplayState.Normal
     Dim _isOverTopPart As Boolean = False
     Dim _isSelected As Boolean = False
 
     Private Sub LoadNodeDisplayMap()
         If _nodeDisplayMapList Is Nothing Then
             _nodeDisplayMapList = New List(Of NodeDisplayMap)
-            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ResourceProvider.NodeDisplayState.Normal, .DefaultOpacity = 0, .MouseOverOpacity = 0.7, .Color = Colors.Blue})
-            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ResourceProvider.NodeDisplayState.CanDrop, .DefaultOpacity = 0.8, .MouseOverOpacity = 1, .Color = Colors.Green})
-            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ResourceProvider.NodeDisplayState.NotDrop, .DefaultOpacity = 0.8, .MouseOverOpacity = 0.9, .Color = Colors.Black})
-            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ResourceProvider.NodeDisplayState.ErrorState, .DefaultOpacity = 0.8, .MouseOverOpacity = 0.9, .Color = Colors.Red})
+            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ASNodeDisplayState.Normal, .DefaultOpacity = 0, .MouseOverOpacity = 0.7, .Color = Colors.Blue})
+            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ASNodeDisplayState.CanDrop, .DefaultOpacity = 0.8, .MouseOverOpacity = 1, .Color = Colors.Green})
+            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ASNodeDisplayState.NotDrop, .DefaultOpacity = 0.8, .MouseOverOpacity = 0.9, .Color = Colors.Black})
+            _nodeDisplayMapList.Add(New NodeDisplayMap With {.State = ASNodeDisplayState.ErrorState, .DefaultOpacity = 0.8, .MouseOverOpacity = 0.9, .Color = Colors.Red})
         End If
     End Sub
 
-    Public Sub SetNodeDisplayState(ByVal state As ResourceProvider.NodeDisplayState)
+    Public Sub SetNodeDisplayState(ByVal state As ASNodeDisplayState)
         _nodeDisplayState = state
         UpdateNodeDisplayState()
     End Sub

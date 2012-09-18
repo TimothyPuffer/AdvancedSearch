@@ -1,34 +1,23 @@
-﻿Public Class ResourceProvider
+﻿Imports System.Collections.ObjectModel
 
-    Enum ResourceType
-        Account
-        Service
-        Member
-    End Enum
-
-    Enum NodeDisplayState
-        Normal
-        CanDrop
-        NotDrop
-        ErrorState
-    End Enum
-
-    Enum ConnectorDisplayState
-        Connecting
-        Normal
-        Selected
-        ErrorState
-        ErrorStateSelected
-    End Enum
+Public Class ResourceProvider
 
     Public Class ResourceInfo
         Dim _displayName As String
-        Dim _displayObject As Object
+        Dim _displayObject As String
+        Dim _resourceType As Integer
 
-        Public Sub New(ByVal displayName As String, ByVal displayObject As Object)
+        Public Sub New(ByVal resouceType As Integer, ByVal displayName As String, ByVal displayObject As String)
+            _resourceType = resouceType
             _displayName = displayName
             _displayObject = displayObject
         End Sub
+
+        Public ReadOnly Property ResourceType() As String
+            Get
+                Return _resourceType
+            End Get
+        End Property
 
         Public ReadOnly Property DisplayName() As String
             Get
@@ -44,32 +33,27 @@
 
     End Class
 
+    Private Shared __DefaultImagePath = "Images/Info.png"
+    Dim _displaypathLookup As New Dictionary(Of Integer, String)
+    Public Sub New(ByVal nodeTypeLookup As Dictionary(Of Integer, String))
+        _displaypathLookup.Add(1, "Images/Info.png")
+        _displaypathLookup.Add(2, "Images/Picture.png")
+        _displaypathLookup.Add(3, "Images/Profile.png")
 
-    Shared Function GetResourceInfo(ByVal resourceTypeEnum As ResourceType) As ResourceInfo
-        FillResourceInfo()
-        Dim ret = Nothing
-        If _resourcelookup.TryGetValue(resourceTypeEnum, ret) Then
-            Return ret
-        Else
-            Return Nothing
-        End If
-    End Function
+        For Each t In nodeTypeLookup
+            If _displaypathLookup.ContainsKey(t.Key) Then
+                _resourceList.Add(New ResourceInfo(t.Key, t.Value, _displaypathLookup(t.Key)))
+            Else
+                _resourceList.Add(New ResourceInfo(t.Key, t.Value, __DefaultImagePath))
+            End If
 
-    Shared Function GetResourceInfos() As ResourceInfo()
-        FillResourceInfo()
-        Return _resourcelookup.Values.ToArray
-    End Function
-
-
-    Shared _resourcelookup As Dictionary(Of ResourceType, ResourceInfo)
-    Private Shared Sub FillResourceInfo()
-        If _resourcelookup Is Nothing Then
-            _resourcelookup = New Dictionary(Of ResourceType, ResourceInfo)
-            _resourcelookup.Add(ResourceType.Account, New ResourceInfo("Account", "Images/Info.png"))
-            _resourcelookup.Add(ResourceType.Service, New ResourceInfo("Service", "Images/Picture.png"))
-            _resourcelookup.Add(ResourceType.Member, New ResourceInfo("Member", "Images/Profile.png"))
-        End If
+        Next
     End Sub
 
+    Dim _resourceList As New List(Of ResourceInfo)
+
+    Public Function GetResourceInfos() As ReadOnlyCollection(Of ResourceInfo)
+        Return New ReadOnlyCollection(Of ResourceInfo)(_resourceList)
+    End Function
 
 End Class

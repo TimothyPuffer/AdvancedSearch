@@ -78,6 +78,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -105,10 +107,15 @@
     <Compile Include="App.xaml.vb">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ASEnum.vb" />
+    <Compile Include="ASNodeManager.vb" />
+    <Compile Include="Interfaces\IASConnection.vb" />
+    <Compile Include="Interfaces\IASNode.vb" />
     <Compile Include="MainPage.xaml.vb">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="NodeFactory\ASNodeFactory.vb" />
     <Compile Include="Node_UC.xaml.vb">
       <DependentUpon>Node_UC.xaml</DependentUpon>
     </Compile>
@@ -130,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="My Project\AppManifest.xml" />
+    <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Info.png" />
@@ -137,7 +145,6 @@
     <Resource Include="Images\Profile.png" />
     <Content Include="TextFile1.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
