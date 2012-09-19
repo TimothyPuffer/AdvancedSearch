@@ -4,14 +4,21 @@
     Private Shared ReadOnly __DefaultNodePosition As New Point(10, 10)
 
     Dim _manager As New ASNodeManager
-    Dim _resourceProvider As ResourceProvider
 
     Dim _nodeListTop As New Dictionary(Of Node_UC, List(Of Line))
     Dim _nodeListBot As New Dictionary(Of Node_UC, List(Of Line))
 
     Public Sub New()
         InitializeComponent()
-        InitializeSources()
+        Me.IsEnabled = False
+        _manager.LoadAsync(AddressOf loadComplete)
+    End Sub
+
+    Private Sub loadComplete(send As Object)
+        If (_manager.IsLoaded) Then
+            Me.IsEnabled = True
+            InitializeSources()
+        End If
     End Sub
 
 #Region "Events"
@@ -28,7 +35,7 @@
     End Sub
 
     Private Sub lb_ResourceType_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs)
-        Dim _selectedResourceInfo As ResourceProvider.ResourceInfo = CType(lb_ResourceType.SelectedItem, ResourceProvider.ResourceInfo)
+        Dim _selectedResourceInfo As ResourceInfo = CType(lb_ResourceType.SelectedItem, ResourceInfo)
         btn_AddNode.IsEnabled = _manager.CanAddNodeType(_selectedResourceInfo.ResourceType)
     End Sub
 
@@ -174,7 +181,7 @@
         Return Nothing
     End Function
 
-    Private Sub AddNode(ByVal nodetype As ResourceProvider.ResourceInfo, ByVal p As Point)
+    Private Sub AddNode(ByVal nodetype As ResourceInfo, ByVal p As Point)
         Dim node As Node_UC = New Node_UC(nodetype.DisplayObject)
         canvasNodeDisplay.Children.Add(node)
 
@@ -189,19 +196,32 @@
         _nodeListTop.Add(node, New List(Of Line))
     End Sub
 
-    Private Sub AddNode(ByVal nodetype As ResourceProvider.ResourceInfo)
+    Private Sub AddNode(ByVal nodetype As ResourceInfo)
         AddNode(nodetype, __DefaultNodePosition)
     End Sub
 
+    Private Shared __DefaultImagePath = "Images/Info.png"
     Private Sub InitializeSources()
         Dim _proxyLookup As New Dictionary(Of Integer, String)
-        _proxyLookup.Add(1, "Account")
-        _proxyLookup.Add(2, "Service")
-        _proxyLookup.Add(3, "Member")
+        For Each n In _manager.MyASNodeConfiguration.ASNodeConfigList
+            _proxyLookup.Add(n.NodeType, n.NodeDisplayText)
+        Next
+        Dim _displaypathLookup As New Dictionary(Of Integer, String)
+        _displaypathLookup.Add(1, "Images/Info.png")
+        _displaypathLookup.Add(2, "Images/Picture.png")
+        _displaypathLookup.Add(3, "Images/Profile.png")
 
-        _resourceProvider = New ResourceProvider(_proxyLookup)
-        lb_ResourceType.ItemsSource = _resourceProvider.GetResourceInfos()
-        lb_ResourceType.SelectedItem = _resourceProvider.GetResourceInfos().First()
+        Dim _resourceList As New List(Of ResourceInfo)
+        For Each t In _proxyLookup
+            If _displaypathLookup.ContainsKey(t.Key) Then
+                _resourceList.Add(New ResourceInfo(t.Key, t.Value, _displaypathLookup(t.Key)))
+            Else
+                _resourceList.Add(New ResourceInfo(t.Key, t.Value, __DefaultImagePath))
+            End If
+        Next
+
+        lb_ResourceType.ItemsSource = _resourceList
+        lb_ResourceType.SelectedItem = _resourceList.First()
     End Sub
 
 #End Region

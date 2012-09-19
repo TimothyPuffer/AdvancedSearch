@@ -114,12 +114,13 @@
     <Compile Include="MainPage.xaml.vb">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ModelLoader.vb" />
+    <Compile Include="Models\NodeConfiguration.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="NodeFactory\ASNodeFactory.vb" />
     <Compile Include="Node_UC.xaml.vb">
       <DependentUpon>Node_UC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ResourceProvider.vb" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

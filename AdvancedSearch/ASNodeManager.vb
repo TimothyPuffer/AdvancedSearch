@@ -1,22 +1,46 @@
 ﻿Imports System.Collections.ObjectModel
 
 Public Class ASNodeManager
-    Implements System.ComponentModel.INotifyPropertyChanged
 
+    Dim _isLoaded As Boolean = False
+    Dim _ASNodeConfiguration As NodeConfiguration = Nothing
 
-    Public Event PropertyChanged(sender As Object, e As System.ComponentModel.PropertyChangedEventArgs) Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-
-    Dim _selectedNode As IASNode = Nothing
-    Public Property SelectedNode() As IASNode
+    Public ReadOnly Property MyASNodeConfiguration As NodeConfiguration
         Get
-            Return _selectedNode
+            Return _ASNodeConfiguration
         End Get
-
-        Set(ByVal Value As IASNode)
-            _selectedNode = Value
-            RaiseEvent PropertyChanged(Me, New System.ComponentModel.PropertyChangedEventArgs("SelectedNode"))
-        End Set
     End Property
+
+
+
+#Region "AsyncLoading"
+
+    Public ReadOnly Property IsLoaded As Boolean
+        Get
+            Return _isLoaded
+        End Get
+    End Property
+
+    Dim _callback As Action(Of Object)
+    Public Sub LoadAsync(callback As Action(Of Object))
+        _callback = callback
+        Dim loadM As New ModelLoader
+        If (_isLoaded = False) Then
+            loadM.LoadNodeConfiguration(AddressOf mycallback)
+        End If
+    End Sub
+
+#End Region
+
+    Private Sub mycallback(config As NodeConfiguration)
+        _ASNodeConfiguration = config
+        _isLoaded = True
+        If _callback IsNot Nothing Then
+            _callback(Me)
+        End If
+    End Sub
+
+    Public Property SelectedNode As IASNode
 
     Dim _nodeList As New List(Of IASNode)
     Public ReadOnly Property NodeList As ReadOnlyCollection(Of IASNode)
