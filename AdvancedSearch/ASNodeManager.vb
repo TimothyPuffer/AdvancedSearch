@@ -1,16 +1,16 @@
 ﻿Imports System.Collections.ObjectModel
 
 Public Class ASNodeManager
+    Dim _nodeMatch As New List(Of NodeMatch)
+    Public Class NodeMatch
+        Public Property ParentNodeID As Integer
+        Public Property ChildNodeID As Integer
+        Public Property ConnentionType As Integer
+    End Class
 
     Dim _isLoaded As Boolean = False
     Dim _ASNodeConfiguration As NodeConfiguration = Nothing
-
-    Public ReadOnly Property MyASNodeConfiguration As NodeConfiguration
-        Get
-            Return _ASNodeConfiguration
-        End Get
-    End Property
-
+    Dim _nodeFactory As NodeFactory
 
 
 #Region "AsyncLoading"
@@ -30,16 +30,18 @@ Public Class ASNodeManager
         End If
     End Sub
 
-#End Region
-
     Private Sub mycallback(config As NodeConfiguration)
         _ASNodeConfiguration = config
+        _nodeFactory = New NodeFactory(config)
         _isLoaded = True
         If _callback IsNot Nothing Then
             _callback(Me)
         End If
     End Sub
 
+#End Region
+
+#Region "Public Properties"
     Public Property SelectedNode As IASNode
 
     Dim _nodeList As New List(Of IASNode)
@@ -57,36 +59,52 @@ Public Class ASNodeManager
     End Property
 
 
+    Public ReadOnly Property MyASNodeConfiguration As NodeConfiguration
+        Get
+            Return _ASNodeConfiguration
+        End Get
+    End Property
+#End Region
+
     Public Function CanAddNodeType(ByVal type As Integer) As Boolean
-        Return True
+        Return _ASNodeConfiguration.ASNodeConfigList.FirstOrDefault(Function(node) node.NodeType = type) IsNot Nothing
     End Function
 
     Public Function AddNodeType(ByVal type As Integer, ByVal tag As Object) As IASNode
-        Return Nothing
+        Dim node = _nodeFactory.CreateNode(_nodeList.Max(Function(x) x.NodeID) + 1, type, tag)
+        _nodeList.Add(node)
+        Return node
     End Function
 
     Public Function CanDeleteNode(ByVal node As IASNode) As Boolean
-        Return True
+        Return _nodeList.Contains(node)
     End Function
 
     Public Sub DeleteNode(ByVal node As IASNode)
-
+        _nodeList.Remove(node)
     End Sub
 
     Public Function CanAddConnection(ByVal nodeParent As IASNode, ByVal nodeChild As IASNode) As Boolean
-        Return True
+        Return _nodeMatch.FirstOrDefault(Function(n) n.ChildNodeID = nodeChild.NodeID) Is Nothing And
+         _ASNodeConfiguration.ASConnectionConfigList.FirstOrDefault(Function(n) n.ParentNodeType = nodeParent.NodeType And n.ChildNodeType = nodeChild.NodeType) IsNot Nothing
     End Function
 
-    Public Function AddConnection(ByVal nodeParent As IASNode, ByVal nodeChild As IASNode, ByVal tag As Object) As IASConnection
-        Return Nothing
+    Public Sub AddConnection(ByVal nodeParent As IASNode, ByVal nodeChild As IASNode)
+        If CanAddConnection(nodeParent, nodeChild) Then
+            Dim contype = _ASNodeConfiguration.ASConnectionConfigList.First(Function(n) n.ChildNodeType = nodeChild.NodeType And n.ParentNodeType = nodeParent.NodeType).ConnectionType
+            _nodeMatch.Add(New NodeMatch With {.ParentNodeID = nodeParent.NodeID, .ChildNodeID = nodeChild.NodeID, .ConnentionType = contype})
+        End If
+    End Sub
+
+    Public Function CanDeleteConnection(ByVal childNode As IASNode) As Boolean
+        Return _nodeMatch.FirstOrDefault(Function(n) n.ChildNodeID = childNode.NodeID) IsNot Nothing
     End Function
 
-    Public Function CanDeleteConnection(ByVal node As IASConnection) As Boolean
-        Return True
-    End Function
-
-    Public Sub DeleteConnection(ByVal node As IASConnection)
-
+    Public Sub DeleteConnection(ByVal childNode As IASNode)
+        If CanDeleteConnection(childNode) Then
+            Dim nm = _nodeMatch.First(Function(n) n.ChildNodeID = childNode.NodeID)
+            _nodeMatch.Remove(nm)
+        End If
     End Sub
 
     Public Sub SetManagerState(ByVal mode As ASNodeManagerState)
