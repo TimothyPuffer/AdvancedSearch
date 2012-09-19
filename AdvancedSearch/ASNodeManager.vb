@@ -51,14 +51,6 @@ Public Class ASNodeManager
         End Get
     End Property
 
-    Dim _connectionList As New List(Of IASConnection)
-    Public ReadOnly Property ConnectionList As ReadOnlyCollection(Of IASConnection)
-        Get
-            Return New ReadOnlyCollection(Of IASConnection)(_connectionList)
-        End Get
-    End Property
-
-
     Public ReadOnly Property MyASNodeConfiguration As NodeConfiguration
         Get
             Return _ASNodeConfiguration
@@ -85,8 +77,11 @@ Public Class ASNodeManager
     End Sub
 
     Public Function CanAddConnection(ByVal nodeParent As IASNode, ByVal nodeChild As IASNode) As Boolean
-        Return _nodeMatch.FirstOrDefault(Function(n) n.ChildNodeID = nodeChild.NodeID) Is Nothing And
-         _ASNodeConfiguration.ASConnectionConfigList.FirstOrDefault(Function(n) n.ParentNodeType = nodeParent.NodeType And n.ChildNodeType = nodeChild.NodeType) IsNot Nothing
+        Dim createsCircleReference = AmIMyOwnParent(nodeParent.NodeID, nodeChild.NodeID)
+        Dim doIAlreadyHaveAParent = _nodeMatch.FirstOrDefault(Function(n) n.ChildNodeID = nodeChild.NodeID) IsNot Nothing
+        Dim connectionConfigExist = _ASNodeConfiguration.ASConnectionConfigList.FirstOrDefault(Function(n) n.ParentNodeType = nodeParent.NodeType And n.ChildNodeType = nodeChild.NodeType) IsNot Nothing
+
+        Return createsCircleReference = False And doIAlreadyHaveAParent = False And connectionConfigExist = True
     End Function
 
     Public Sub AddConnection(ByVal nodeParent As IASNode, ByVal nodeChild As IASNode)
@@ -115,8 +110,17 @@ Public Class ASNodeManager
         Return ASNodeDisplayState.CanDrop
     End Function
 
-    Public Function GetConnectionDisplayState(ByVal connection As IASConnection) As ASConnectorDisplayState
-        Return ASConnectorDisplayState.Connecting
+
+    Private Function AmIMyOwnParent(ByVal parentNode As Integer, ByVal childNode As Integer)
+        If parentNode = childNode Then
+            Return True
+        End If
+        Dim nm As NodeMatch = _nodeMatch.FirstOrDefault(Function(n) n.ChildNodeID = parentNode)
+        If nm IsNot Nothing Then
+            Return AmIMyOwnParent(nm.ParentNodeID, childNode)
+        End If
+        Return False
     End Function
+
 
 End Class
