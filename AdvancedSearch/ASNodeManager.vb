@@ -1,17 +1,11 @@
 ﻿Imports System.Collections.ObjectModel
 
 Public Class ASNodeManager
-    Dim _nodeMatch As New List(Of NodeMatch)
-    Public Class NodeMatch
-        Public Property ParentNodeID As Integer
-        Public Property ChildNodeID As Integer
-        Public Property ConnentionType As Integer
-    End Class
 
+    Dim _nodeMatch As New List(Of NodeMatch)
     Dim _isLoaded As Boolean = False
     Dim _ASNodeConfiguration As NodeConfiguration = Nothing
     Dim _nodeFactory As NodeFactory
-
 
 #Region "AsyncLoading"
 
@@ -42,7 +36,6 @@ Public Class ASNodeManager
 #End Region
 
 #Region "Public Properties"
-    Public Property SelectedNode As IASNode
 
     Dim _nodeList As New List(Of IASNode)
     Public ReadOnly Property NodeList As ReadOnlyCollection(Of IASNode)
@@ -57,6 +50,8 @@ Public Class ASNodeManager
         End Get
     End Property
 #End Region
+
+#Region "Public Methods"
 
     Public Function CanAddNodeType(ByVal type As Integer) As Boolean
         Return _ASNodeConfiguration.ASNodeConfigList.FirstOrDefault(Function(node) node.NodeType = type) IsNot Nothing
@@ -110,6 +105,9 @@ Public Class ASNodeManager
         Return ASNodeDisplayState.CanDrop
     End Function
 
+#End Region
+
+#Region "Private Functions"
 
     Private Function AmIMyOwnParent(ByVal parentNode As Integer, ByVal childNode As Integer)
         If parentNode = childNode Then
@@ -122,5 +120,6 @@ Public Class ASNodeManager
         Return False
     End Function
 
+#End Region
 
 End Class

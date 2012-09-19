@@ -40,3 +40,9 @@ Public Class ResourceInfo
     End Property
 
 End Class
+
+Public Class NodeMatch
+    Public Property ParentNodeID As Integer
+    Public Property ChildNodeID As Integer
+    Public Property ConnentionType As Integer
+End Class
