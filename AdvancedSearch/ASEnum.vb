@@ -5,11 +5,6 @@
     ErrorState = 3
 End Enum
 
-Public Enum ASNodeManagerState
-    Normal = 0
-    DragAndDrop = 1
-End Enum
-
 Public Class ResourceInfo
     Dim _displayName As String
     Dim _displayObject As String
@@ -21,7 +16,7 @@ Public Class ResourceInfo
         _displayObject = displayObject
     End Sub
 
-    Public ReadOnly Property ResourceType() As String
+    Public ReadOnly Property ResourceType() As Integer
         Get
             Return _resourceType
         End Get

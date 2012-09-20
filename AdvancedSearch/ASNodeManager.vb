@@ -58,7 +58,12 @@ Public Class ASNodeManager
     End Function
 
     Public Function AddNodeType(ByVal type As Integer, ByVal tag As Object) As IASNode
-        Dim node = _nodeFactory.CreateNode(_nodeList.Max(Function(x) x.NodeID) + 1, type, tag)
+        Dim nodeID As Integer = 1
+        If _nodeList.Count > 0 Then
+            nodeID = _nodeList.Max(Function(x) x.NodeID) + 1
+        End If
+
+        Dim node = _nodeFactory.CreateNode(type, nodeID, tag)
         _nodeList.Add(node)
         Return node
     End Function
@@ -72,6 +77,9 @@ Public Class ASNodeManager
     End Sub
 
     Public Function CanAddConnection(ByVal nodeParent As IASNode, ByVal nodeChild As IASNode) As Boolean
+        If nodeParent Is Nothing Or nodeChild Is Nothing Then
+            Return False
+        End If
         Dim createsCircleReference = AmIMyOwnParent(nodeParent.NodeID, nodeChild.NodeID)
         Dim doIAlreadyHaveAParent = _nodeMatch.FirstOrDefault(Function(n) n.ChildNodeID = nodeChild.NodeID) IsNot Nothing
         Dim connectionConfigExist = _ASNodeConfiguration.ASConnectionConfigList.FirstOrDefault(Function(n) n.ParentNodeType = nodeParent.NodeType And n.ChildNodeType = nodeChild.NodeType) IsNot Nothing
@@ -97,14 +105,32 @@ Public Class ASNodeManager
         End If
     End Sub
 
-    Public Sub SetManagerState(ByVal mode As ASNodeManagerState)
-
-    End Sub
-
     Public Function GetNodeDisplayState(ByVal node As IASNode) As ASNodeDisplayState
-        Return ASNodeDisplayState.CanDrop
+        If _dragStartNode IsNot Nothing Then
+            If CanAddConnection(_dragStartNode, node) Then
+                Return ASNodeDisplayState.CanDrop
+            Else
+                Return ASNodeDisplayState.NotDrop
+            End If
+        Else
+            Return ASNodeDisplayState.Normal
+        End If
     End Function
 
+#End Region
+
+#Region "Drag and Drop Public"
+    Dim _dragStartNode As IASNode = Nothing
+    Public Sub StartDragDrop(ByVal dragStartNode As IASNode)
+        _dragStartNode = dragStartNode
+    End Sub
+
+    Public Sub EndDragDrop(ByVal dragEndNode As IASNode)
+        If CanAddConnection(_dragStartNode, dragEndNode) Then
+            AddConnection(_dragStartNode, dragEndNode)
+        End If
+        _dragStartNode = Nothing
+    End Sub
 #End Region
 
 #Region "Private Functions"

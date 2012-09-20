@@ -46,6 +46,9 @@
     Dim _tmpConnectingLine As Line = Nothing
     Dim _tmpConnectingNode As Node_UC = Nothing
     Private Sub Connector_Selected(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
+        _manager.StartDragDrop(_manager.NodeList.First(Function(n) n.Tag.Equals(sender)))
+        UpdateNodesState()
+
         _tmpConnectingLine = New Line()
         _tmpConnectingNode = sender
         canvasNodeDisplay.Children.Add(_tmpConnectingLine)
@@ -61,6 +64,14 @@
 
     Private Sub Node_DroppedOn(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
         If _tmpConnectingLine IsNot Nothing Then
+            If Not _manager.CanAddConnection(_manager.NodeList.First(Function(n) n.Tag.Equals(_tmpConnectingNode)), _manager.NodeList.First(Function(n) n.Tag.Equals(sender))) Then
+                CancelDragAndDrop()
+                Return
+            End If
+
+            _manager.EndDragDrop(_manager.NodeList.First(Function(n) n.Tag.Equals(sender)))
+            UpdateNodesState()
+
             SetLineEndToCenter(_tmpConnectingLine, sender.top_part)
 
             Dim addlist As List(Of Line) = Nothing
@@ -111,16 +122,28 @@
     End Sub
 
     Private Sub canvasNodeDisplay_MouseLeftButtonUp(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs)
+        CancelDragAndDrop()
+    End Sub
+
+    Private Sub CancelDragAndDrop()
         If _tmpConnectingLine IsNot Nothing Then
             canvasNodeDisplay.Children.Remove(_tmpConnectingLine)
             _tmpConnectingLine = Nothing
             _tmpConnectingNode = Nothing
+            _manager.EndDragDrop(Nothing)
+            UpdateNodesState()
         End If
     End Sub
 
 #End Region
 
 #Region "Private Methods"
+    Private Sub UpdateNodesState()
+        For Each n In _manager.NodeList
+            Dim n_UC As Node_UC = CType(n.Tag, Node_UC)
+            n_UC.SetNodeDisplayState(_manager.GetNodeDisplayState(n))
+        Next
+    End Sub
 
     Private Function GetTangentOffset(l As Line, circle As FrameworkElement) As Point
 
@@ -183,6 +206,7 @@
 
     Private Sub AddNode(ByVal nodetype As ResourceInfo, ByVal p As Point)
         Dim node As Node_UC = New Node_UC(nodetype.DisplayObject)
+        _manager.AddNodeType(nodetype.ResourceType, node)
         canvasNodeDisplay.Children.Add(node)
 
         node.SetValue(Canvas.TopProperty, p.Y)
