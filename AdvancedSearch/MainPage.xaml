@@ -17,18 +17,6 @@
             <ColumnDefinition Width="200"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
-            <Button Click="Button_Click_1" Tag="0" Margin="10,5,10,5">
-                <TextBlock>CanDrop</TextBlock>
-            </Button>
-            <Button Click="Button_Click_1" Tag="1" Margin="10,5,10,5">
-                <TextBlock>ErrorState</TextBlock>
-            </Button>
-            <Button Click="Button_Click_1" Tag="3" Margin="10,5,10,5">
-                <TextBlock>Normal</TextBlock>
-            </Button>
-            <Button Click="Button_Click_1" Tag="4" Margin="10,5,10,5">
-                <TextBlock>NotDrop</TextBlock>
-            </Button>
             <Button Name="btn_AddNode" Click="Button_Click" Margin="10,5,10,5">
                 <TextBlock>Add Node</TextBlock>
             </Button>

@@ -2,10 +2,9 @@
 
 Public Class ASNodeManager
 
-    Dim _nodeMatch As New List(Of NodeMatch)
     Dim _isLoaded As Boolean = False
     Dim _ASNodeConfiguration As NodeConfiguration = Nothing
-    Dim _nodeFactory As NodeFactory
+    Dim _nodeList As New List(Of IASNode)
 
 #Region "AsyncLoading"
 
@@ -26,7 +25,6 @@ Public Class ASNodeManager
 
     Private Sub mycallback(config As NodeConfiguration)
         _ASNodeConfiguration = config
-        _nodeFactory = New NodeFactory(config)
         _isLoaded = True
         If _callback IsNot Nothing Then
             _callback(Me)
@@ -37,7 +35,6 @@ Public Class ASNodeManager
 
 #Region "Public Properties"
 
-    Dim _nodeList As New List(Of IASNode)
     Public ReadOnly Property NodeList As ReadOnlyCollection(Of IASNode)
         Get
             Return New ReadOnlyCollection(Of IASNode)(_nodeList)
@@ -63,7 +60,7 @@ Public Class ASNodeManager
             nodeID = _nodeList.Max(Function(x) x.NodeID) + 1
         End If
 
-        Dim node = _nodeFactory.CreateNode(type, nodeID, tag)
+        Dim node = CreateNode(type, nodeID, tag)
         _nodeList.Add(node)
         Return node
     End Function
@@ -73,6 +70,7 @@ Public Class ASNodeManager
     End Function
 
     Public Sub DeleteNode(ByVal node As IASNode)
+        node.RemoveFromTree()
         _nodeList.Remove(node)
     End Sub
 
@@ -80,8 +78,8 @@ Public Class ASNodeManager
         If nodeParent Is Nothing Or nodeChild Is Nothing Then
             Return False
         End If
-        Dim createsCircleReference = AmIMyOwnParent(nodeParent.NodeID, nodeChild.NodeID)
-        Dim doIAlreadyHaveAParent = _nodeMatch.FirstOrDefault(Function(n) n.ChildNodeID = nodeChild.NodeID) IsNot Nothing
+        Dim createsCircleReference = nodeChild.GetAllParentNodes().Contains(nodeChild)
+        Dim doIAlreadyHaveAParent = nodeChild.ParentNode IsNot Nothing
         Dim connectionConfigExist = _ASNodeConfiguration.ASConnectionConfigList.FirstOrDefault(Function(n) n.ParentNodeType = nodeParent.NodeType And n.ChildNodeType = nodeChild.NodeType) IsNot Nothing
 
         Return createsCircleReference = False And doIAlreadyHaveAParent = False And connectionConfigExist = True
@@ -90,19 +88,22 @@ Public Class ASNodeManager
     Public Sub AddConnection(ByVal nodeParent As IASNode, ByVal nodeChild As IASNode)
         If CanAddConnection(nodeParent, nodeChild) Then
             Dim contype = _ASNodeConfiguration.ASConnectionConfigList.First(Function(n) n.ChildNodeType = nodeChild.NodeType And n.ParentNodeType = nodeParent.NodeType).ConnectionType
-            _nodeMatch.Add(New NodeMatch With {.ParentNodeID = nodeParent.NodeID, .ChildNodeID = nodeChild.NodeID, .ConnentionType = contype})
+
+            nodeChild.ParentNode = nodeParent
+            nodeParent.ChildrenNodes.Add(nodeParent)
+
         End If
     End Sub
 
     Public Function CanDeleteConnection(ByVal childNode As IASNode) As Boolean
-        Return _nodeMatch.FirstOrDefault(Function(n) n.ChildNodeID = childNode.NodeID) IsNot Nothing
+        Return True
     End Function
 
     Public Sub DeleteConnection(ByVal childNode As IASNode)
-        If CanDeleteConnection(childNode) Then
-            Dim nm = _nodeMatch.First(Function(n) n.ChildNodeID = childNode.NodeID)
-            _nodeMatch.Remove(nm)
-        End If
+        childNode.ParentNode.ChildrenNodes.Remove(childNode)
+        For Each n In childNode.ChildrenNodes
+            n.ParentNode = Nothing
+        Next
     End Sub
 
     Public Function GetNodeDisplayState(ByVal node As IASNode) As ASNodeDisplayState
@@ -133,19 +134,10 @@ Public Class ASNodeManager
     End Sub
 #End Region
 
-#Region "Private Functions"
-
-    Private Function AmIMyOwnParent(ByVal parentNode As Integer, ByVal childNode As Integer)
-        If parentNode = childNode Then
-            Return True
-        End If
-        Dim nm As NodeMatch = _nodeMatch.FirstOrDefault(Function(n) n.ChildNodeID = parentNode)
-        If nm IsNot Nothing Then
-            Return AmIMyOwnParent(nm.ParentNodeID, childNode)
-        End If
-        Return False
+#Region "Factory Methods"
+    Public Function CreateNode(ByVal nodeType As Integer, ByVal nodeID As Integer, ByVal tag As Object) As IASNode
+        Return New ASNodeBase(nodeID, _ASNodeConfiguration.ASNodeConfigList.First(Function(n) n.NodeType = nodeType).NodeDisplayText, nodeType, tag)
     End Function
-
 #End Region
 
 End Class

@@ -250,23 +250,4 @@
 
 #End Region
 
-    Private Sub Button_Click_1(sender As System.Object, e As System.Windows.RoutedEventArgs)
-        Dim b As Button = sender
-        Dim s As ASNodeDisplayState = ASNodeDisplayState.Normal
-        If b.Tag = "0" Then
-            s = ASNodeDisplayState.CanDrop
-        ElseIf b.Tag = "1" Then
-            s = ASNodeDisplayState.ErrorState
-        ElseIf b.Tag = "3" Then
-            s = ASNodeDisplayState.Normal
-        ElseIf b.Tag = "4" Then
-            s = ASNodeDisplayState.NotDrop
-        End If
-
-        For Each n In _nodeListTop
-            n.Key.SetNodeDisplayState(s)
-        Next
-
-    End Sub
-
 End Class

@@ -1,6 +1,12 @@
 ﻿Public Class ASNodeBase
     Implements IASNode
 
+    Public Property TableColumnChooser As TableChooserModel
+
+    Public Property ChildrenNodes As New System.Collections.Generic.List(Of IASNode) Implements IASNode.ChildrenNodes
+
+    Public Property ParentNode As IASNode Implements IASNode.ParentNode
+
     Dim _nodeID As Integer
     Dim _nodeText As String
     Dim _nodeType As Integer
@@ -37,4 +43,5 @@
             Return _tag
         End Get
     End Property
+
 End Class
