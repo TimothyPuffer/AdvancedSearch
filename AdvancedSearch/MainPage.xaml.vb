@@ -32,6 +32,9 @@
             n.Key.SetIsSelected(False)
         Next
         sender.SetIsSelected(True)
+        lb_ColumnChooser.ItemsSource = Nothing
+        lb_ColumnChooser.ItemsSource = _manager.SetSelectedNode(_manager.NodeList.First(Function(n) n.Tag.Equals(sender)))
+
     End Sub
 
     Private Sub lb_ResourceType_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs)
@@ -70,6 +73,9 @@
             End If
 
             _manager.EndDragDrop(_manager.NodeList.First(Function(n) n.Tag.Equals(sender)))
+            Dim o = lb_ColumnChooser.ItemsSource
+            lb_ColumnChooser.ItemsSource = Nothing
+            lb_ColumnChooser.ItemsSource = o
             UpdateNodesState()
 
             SetLineEndToCenter(_tmpConnectingLine, sender.top_part)

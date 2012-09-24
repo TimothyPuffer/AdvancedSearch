@@ -50,6 +50,11 @@ Public Class ASNodeManager
 
 #Region "Public Methods"
 
+    Public Function SetSelectedNode(ByVal node As IASNode) As Object
+        UpdateColumnChooserModel(node)
+        Return node.TableColumnChooserList
+    End Function
+
     Public Function CanAddNodeType(ByVal type As Integer) As Boolean
         Return _ASNodeConfiguration.ASNodeConfigList.FirstOrDefault(Function(node) node.NodeType = type) IsNot Nothing
     End Function
@@ -90,8 +95,8 @@ Public Class ASNodeManager
             Dim contype = _ASNodeConfiguration.ASConnectionConfigList.First(Function(n) n.ChildNodeType = nodeChild.NodeType And n.ParentNodeType = nodeParent.NodeType).ConnectionType
 
             nodeChild.ParentNode = nodeParent
-            nodeParent.ChildrenNodes.Add(nodeParent)
-
+            nodeParent.ChildrenNodes.Add(nodeChild)
+            _nodeList.ForEach(Sub(n) UpdateColumnChooserModel(n))
         End If
     End Sub
 
@@ -141,7 +146,8 @@ Public Class ASNodeManager
 
 #Region "Factory Methods"
     Public Function CreateNode(ByVal nodeType As Integer, ByVal nodeID As Integer, ByVal tag As Object) As IASNode
-        Return New ASNodeBase(nodeID, String.Format("Table({0})", nodeID), _ASNodeConfiguration.ASNodeConfigList.First(Function(n) n.NodeType = nodeType).NodeDisplayText, nodeType, tag)
+        Dim disText = _ASNodeConfiguration.ASNodeConfigList.First(Function(n) n.NodeType = nodeType).NodeDisplayText
+        Return New ASNodeBase(nodeID, String.Format("{0}({1})", disText, nodeID), disText, nodeType, tag)
     End Function
 
     Public Sub UpdateColumnChooserModel(ByVal node As IASNode)
@@ -149,15 +155,41 @@ Public Class ASNodeManager
             Return
         End If
 
-        If (node.TableColumnChooserList.FirstOrDefault(Function(n) node.Equals(n.TableTag)) Is Nothing) Then
-            Dim tcm = New TableChooserModel(node.MyName, node)
-            _ASNodeConfiguration.ASNodeColumnConfigList.Where(Function(n) n.NodeType.Equals(node.NodeType)).
-                ToList().ForEach(Sub(x) tcm.ColumnChooserList.Add(New ColumnChooserModel(x.ColumnDisplayName) With {.ColumnIsSelected = False}))
-        End If
+        node.TableColumnChooserList.Where(Function(n) Not n.Equals(node)).ToList().ForEach(Sub(n) n.TableGroupVisibility = Visibility.Collapsed)
 
-
+        CheckCreateTableChooserModel(node, node, False)
+        node.GetAllParentNodes().ToList().ForEach(Sub(n) CheckCreateTableChooserModel(node, n, False))
+        node.GetAllChildrenNodes().ToList().ForEach(Sub(n) CheckCreateTableChooserModel(node, n, True))
 
     End Sub
+
+    Private Sub CheckCreateTableChooserModel(ByVal povitNode As IASNode, ByVal node As IASNode, ByVal isAggregate As Boolean)
+        Dim ptcm As TableChooserModel = povitNode.TableColumnChooserList.FirstOrDefault(Function(n) node.Equals(n.TableTag))
+        If ptcm Is Nothing Then
+            ptcm = New TableChooserModel(node.MyName, node) With {.TableGroupVisibility = Visibility.Visible}
+            povitNode.TableColumnChooserList.Add(ptcm)
+        End If
+
+        ptcm.TableGroupVisibility = Visibility.Visible
+        FillTableChooserModelNormal(ptcm, node.NodeType, isAggregate)
+    End Sub
+
+    Private Sub FillTableChooserModelNormal(ByVal tcm As TableChooserModel, ByVal nodeType As Integer, ByVal isAggregate As Boolean)
+        For Each nodeConfig In _ASNodeConfiguration.ASNodeColumnConfigList.Where(Function(n) n.NodeType.Equals(nodeType))
+            Dim iterNodeConfig = nodeConfig
+            Dim ccm As ColumnChooserModel = tcm.ColumnChooserList.FirstOrDefault(Function(cn) cn.ColumnDisplayName = iterNodeConfig.ColumnDisplayName)
+            If ccm Is Nothing Then
+                ccm = New ColumnChooserModel(nodeConfig.ColumnDisplayName) With {.ColumnIsSelected = False}
+                tcm.ColumnChooserList.Add(ccm)
+            End If
+            If Not isAggregate Xor iterNodeConfig.IsAggregate Then
+                ccm.ColumnVisibility = Visibility.Visible
+            Else
+                ccm.ColumnVisibility = Visibility.Collapsed
+            End If
+        Next
+    End Sub
+
 #End Region
 
 End Class

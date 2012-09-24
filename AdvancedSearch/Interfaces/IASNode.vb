@@ -83,9 +83,10 @@ Module IASNodeExtension
 
     Private Sub p_GetAllChildrenNodes(ByVal node As IASNode, ByVal list As IList(Of IASNode))
 
-        For Each n In node.ChildrenNodes
-            list.Add(n)
-            p_GetAllChildrenNodes(n, list)
+        For Each n In node.ChildrenNodes.ToList()
+            Dim iterN = n
+            list.Add(iterN)
+            p_GetAllChildrenNodes(iterN, list)
         Next
 
     End Sub

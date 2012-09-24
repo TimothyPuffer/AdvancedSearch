@@ -3,7 +3,6 @@
     Public ASConnectionConfigList As New List(Of ASConnectionConfig)
     Public ASNodeConfigList As New List(Of ASNodeConfig)
     Public ASNodeColumnConfigList As New List(Of ASNodeColumnConfig)
-    Public ASNodeAggregateColumnConfigList As New List(Of ASNodeAggregateColumnConfig)
     Public ASNodeColumnCriteriaConfigList As New List(Of ASNodeColumnCriteriaConfig)
     Public ASGroupNodeConfigList As New List(Of ASGroupNodeConfig)
 
@@ -26,12 +25,7 @@ Public Class ASNodeColumnConfig
     Public ColumnType As Integer
     Public ColumnDataType As Type
     Public Property ColumnDisplayName As String
-End Class
-
-Public Class ASNodeAggregateColumnConfig
-    Public NodeType As Integer
-    Public ColumnDisplayName As String
-    Public AggregateChooseLookup As Dictionary(Of Integer, String)
+    Public Property IsAggregate As Boolean
 End Class
 
 Public Class ASNodeColumnCriteriaConfig

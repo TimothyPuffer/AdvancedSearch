@@ -41,15 +41,26 @@
             </Canvas>
         </ScrollViewer>
         <StackPanel Grid.Column="2">
-            <ListBox>
-                <ListBox.ItemTemplate>
+            <ItemsControl Name="lb_ColumnChooser">
+                <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <TextBlock Text="{Binding Path=TableName}"></TextBlock>
+                            <Border BorderThickness="1" CornerRadius="2" BorderBrush="Black" >
+                                <TextBlock Text="{Binding Path=TableName}"></TextBlock>
+                            </Border>
+                            <ItemsControl ItemsSource="{Binding Path=ColumnChooserList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Visibility="{Binding Path=ColumnVisibility}">
+                                            <CheckBox IsChecked="{Binding Path=ColumnIsSelected,Mode=TwoWay}" Content="{Binding Path=ColumnDisplayName}"></CheckBox>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
     </Grid>
 </UserControl>
