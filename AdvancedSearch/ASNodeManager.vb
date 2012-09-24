@@ -114,7 +114,12 @@ Public Class ASNodeManager
                 Return ASNodeDisplayState.NotDrop
             End If
         Else
-            Return ASNodeDisplayState.Normal
+            Dim rootNode = _nodeList.OrderBy(Function(n) n.NodeID).FirstOrDefault
+            If node.ParentNode Is Nothing And node IsNot rootNode Then
+                Return ASNodeDisplayState.ErrorState
+            Else
+                Return ASNodeDisplayState.Normal
+            End If
         End If
     End Function
 
@@ -136,8 +141,23 @@ Public Class ASNodeManager
 
 #Region "Factory Methods"
     Public Function CreateNode(ByVal nodeType As Integer, ByVal nodeID As Integer, ByVal tag As Object) As IASNode
-        Return New ASNodeBase(nodeID, _ASNodeConfiguration.ASNodeConfigList.First(Function(n) n.NodeType = nodeType).NodeDisplayText, nodeType, tag)
+        Return New ASNodeBase(nodeID, String.Format("Table({0})", nodeID), _ASNodeConfiguration.ASNodeConfigList.First(Function(n) n.NodeType = nodeType).NodeDisplayText, nodeType, tag)
     End Function
+
+    Public Sub UpdateColumnChooserModel(ByVal node As IASNode)
+        If (node Is Nothing) Then
+            Return
+        End If
+
+        If (node.TableColumnChooserList.FirstOrDefault(Function(n) node.Equals(n.TableTag)) Is Nothing) Then
+            Dim tcm = New TableChooserModel(node.MyName, node)
+            _ASNodeConfiguration.ASNodeColumnConfigList.Where(Function(n) n.NodeType.Equals(node.NodeType)).
+                ToList().ForEach(Sub(x) tcm.ColumnChooserList.Add(New ColumnChooserModel(x.ColumnDisplayName) With {.ColumnIsSelected = False}))
+        End If
+
+
+
+    End Sub
 #End Region
 
 End Class

@@ -41,10 +41,15 @@
             </Canvas>
         </ScrollViewer>
         <StackPanel Grid.Column="2">
-            <TextBlock Name="tb_x"></TextBlock>
-            <TextBlock Name="tb_y"></TextBlock>
-            <TextBlock Name="tb_xc"></TextBlock>
-            <TextBlock Name="tb_yc"></TextBlock>
+            <ListBox>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=TableName}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -8,6 +8,10 @@ Public Interface IASNode
 
     Property ChildrenNodes As List(Of IASNode)
 
+    ReadOnly Property TableColumnChooserList As List(Of TableChooserModel)
+
+    ReadOnly Property MyName As String
+
     ReadOnly Property NodeID As Integer
 
     ReadOnly Property NodeType As Integer

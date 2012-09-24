@@ -1,7 +1,6 @@
 ﻿Public Class ASNodeBase
     Implements IASNode
 
-    Public Property TableColumnChooser As TableChooserModel
 
     Public Property ChildrenNodes As New System.Collections.Generic.List(Of IASNode) Implements IASNode.ChildrenNodes
 
@@ -11,11 +10,15 @@
     Dim _nodeText As String
     Dim _nodeType As Integer
     Dim _tag As Object
-    Public Sub New(ByVal nodeID As Integer, ByVal nodeText As String, ByVal nodeType As Integer, ByVal tag As Object)
+    Dim _myName As String
+    Dim _tableColumnChooserList As New List(Of TableChooserModel)
+    Public Sub New(ByVal nodeID As Integer, ByVal myName As String, ByVal nodeText As String, ByVal nodeType As Integer, ByVal tag As Object)
         _nodeID = nodeID
+        _myName = myName
         _nodeText = nodeText
         _nodeType = nodeType
         _tag = tag
+        _tableColumnChooserList = New List(Of TableChooserModel)
     End Sub
 
     Public ReadOnly Property NodeID As Integer Implements IASNode.NodeID
@@ -44,4 +47,15 @@
         End Get
     End Property
 
+    Public ReadOnly Property MyName As String Implements IASNode.MyName
+        Get
+            Return _myName
+        End Get
+    End Property
+
+    Public ReadOnly Property TableColumnChooserList As System.Collections.Generic.List(Of TableChooserModel) Implements IASNode.TableColumnChooserList
+        Get
+            Return _tableColumnChooserList
+        End Get
+    End Property
 End Class

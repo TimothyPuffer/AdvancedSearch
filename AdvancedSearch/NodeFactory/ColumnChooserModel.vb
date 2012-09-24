@@ -1,6 +1,6 @@
 ﻿Public Class TableChooserModel
 
-    Public Sub New(ByVal tableName As String)
+    Public Sub New(ByVal tableName As String, ByVal tabletag As Object)
         _tableName = tableName
     End Sub
 
@@ -8,6 +8,13 @@
     Public ReadOnly Property TableName As String
         Get
             Return _tableName
+        End Get
+    End Property
+
+    Dim _tabletag As Object = Nothing
+    Public ReadOnly Property TableTag As String
+        Get
+            Return _tabletag
         End Get
     End Property
 

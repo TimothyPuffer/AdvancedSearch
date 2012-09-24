@@ -206,8 +206,9 @@
 
     Private Sub AddNode(ByVal nodetype As ResourceInfo, ByVal p As Point)
         Dim node As Node_UC = New Node_UC(nodetype.DisplayObject)
-        _manager.AddNodeType(nodetype.ResourceType, node)
         canvasNodeDisplay.Children.Add(node)
+        Dim iasNode = _manager.AddNodeType(nodetype.ResourceType, node)
+        node.SetNodeDisplayState(_manager.GetNodeDisplayState(iasNode))
 
         node.SetValue(Canvas.TopProperty, p.Y)
         node.SetValue(Canvas.LeftProperty, p.X)
