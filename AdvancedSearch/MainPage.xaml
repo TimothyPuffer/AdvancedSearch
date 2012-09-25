@@ -32,13 +32,20 @@
             </ListBox>
         </StackPanel>
         <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto">
-            <Canvas Name="canvasNodeDisplay" 
+            <StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Name="btn_delete_node" Click="btn_delete_node_Click" IsEnabled="False" Margin="5">
+                        <TextBlock>Delete Node</TextBlock>
+                    </Button>
+                </StackPanel>
+                <Canvas Name="canvasNodeDisplay" 
                     Background="White"
                     Height="800"
                     Width="700"
                     MouseMove="canvasNodeDisplay_MouseMove"
                     MouseLeftButtonUp="canvasNodeDisplay_MouseLeftButtonUp">
-            </Canvas>
+                </Canvas>
+            </StackPanel>
         </ScrollViewer>
         <StackPanel Grid.Column="2">
             <ItemsControl Name="lb_ColumnChooser">

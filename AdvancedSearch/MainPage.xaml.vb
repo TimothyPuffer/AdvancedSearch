@@ -27,19 +27,46 @@
         AddNode(lb_ResourceType.SelectedItem)
     End Sub
 
+    Dim _selectedNode As Node_UC = Nothing
     Private Sub Node_Selected(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
         For Each n In _nodeListTop
             n.Key.SetIsSelected(False)
         Next
-        sender.SetIsSelected(True)
-        lb_ColumnChooser.ItemsSource = Nothing
-        lb_ColumnChooser.ItemsSource = _manager.SetSelectedNode(_manager.NodeList.First(Function(n) n.Tag.Equals(sender)))
 
+        _selectedNode = sender
+        If sender IsNot Nothing Then
+            sender.SetIsSelected(True)
+        End If
+        lb_ColumnChooser.ItemsSource = Nothing
+        Dim selectedIASN = _manager.NodeList.FirstOrDefault(Function(n) n.Tag.Equals(sender))
+        lb_ColumnChooser.ItemsSource = _manager.SetSelectedNode(selectedIASN)
+        btn_delete_node.IsEnabled = _manager.CanDeleteNode(selectedIASN)
     End Sub
 
     Private Sub lb_ResourceType_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs)
         Dim _selectedResourceInfo As ResourceInfo = CType(lb_ResourceType.SelectedItem, ResourceInfo)
         btn_AddNode.IsEnabled = _manager.CanAddNodeType(_selectedResourceInfo.ResourceType)
+    End Sub
+
+    Private Sub btn_delete_node_Click(sender As System.Object, e As System.Windows.RoutedEventArgs)
+        Dim selectedIASN = _manager.NodeList.First(Function(n) n.Tag.Equals(_selectedNode))
+        _manager.DeleteNode(selectedIASN)
+
+        DeleteUIElementConnection(_nodeListBot)
+        DeleteUIElementConnection(_nodeListTop)
+        If canvasNodeDisplay.Children.Contains(_selectedNode) Then
+            canvasNodeDisplay.Children.Remove(_selectedNode)
+        End If
+        Node_Selected(Nothing, Nothing)
+    End Sub
+
+    Private Sub DeleteUIElementConnection(ByVal dicHold As Dictionary(Of Node_UC, List(Of Line)))
+        Dim lines As List(Of Line) = Nothing
+
+        If dicHold.TryGetValue(_selectedNode, lines) Then
+            lines.ForEach(Sub(x) canvasNodeDisplay.Children.Remove(x))
+            lines.ForEach(Sub(x) lines.Remove(x))
+        End If
     End Sub
 
 #End Region
@@ -225,6 +252,7 @@
         AddHandler node.NodeMove, AddressOf Node_Move
 
         _nodeListTop.Add(node, New List(Of Line))
+        Node_Selected(node, Nothing)
     End Sub
 
     Private Sub AddNode(ByVal nodetype As ResourceInfo)

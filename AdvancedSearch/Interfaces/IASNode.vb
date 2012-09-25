@@ -63,12 +63,18 @@ Module IASNodeExtension
             Return False
         End If
 
-        If node.ParentNode.ChildrenNodes.Contains(node) Then
-            node.ParentNode.ChildrenNodes.Remove(node)
-        End If
         For Each n In node.ChildrenNodes
             n.ParentNode = Nothing
         Next
+
+        If node.ParentNode Is Nothing Then
+            Return True
+        End If
+
+        If node.ParentNode.ChildrenNodes.Contains(node) Then
+            node.ParentNode.ChildrenNodes.Remove(node)
+        End If
+
         Return True
     End Function
 

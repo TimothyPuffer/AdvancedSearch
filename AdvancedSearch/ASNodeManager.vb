@@ -51,6 +51,9 @@ Public Class ASNodeManager
 #Region "Public Methods"
 
     Public Function SetSelectedNode(ByVal node As IASNode) As Object
+        If node Is Nothing Then
+            Return Nothing
+        End If
         UpdateColumnChooserModel(node)
         Return node.TableColumnChooserList
     End Function
@@ -71,6 +74,9 @@ Public Class ASNodeManager
     End Function
 
     Public Function CanDeleteNode(ByVal node As IASNode) As Boolean
+        If node Is Nothing Then
+            Return False
+        End If
         Return _nodeList.Contains(node)
     End Function
 
