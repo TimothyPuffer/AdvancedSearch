@@ -58,6 +58,7 @@
             canvasNodeDisplay.Children.Remove(_selectedNode)
         End If
         Node_Selected(Nothing, Nothing)
+        UpdateNodesState()
     End Sub
 
     Private Sub DeleteUIElementConnection(ByVal dicHold As Dictionary(Of Node_UC, List(Of Line)))

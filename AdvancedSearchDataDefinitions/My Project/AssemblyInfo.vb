@@ -7,17 +7,18 @@ Imports System.Runtime.InteropServices
 ' associated with an assembly.
 
 ' Review the values of the assembly attributes
-<Assembly: AssemblyTitle("AdvancedSearchWebService")> 
+
+<Assembly: AssemblyTitle("AdvancedSearchDataDefinitions")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("AdvancedSearchWebService")> 
-<Assembly: AssemblyCopyright("Copyright ©  2012")> 
+<Assembly: AssemblyCompany("Microsoft")> 
+<Assembly: AssemblyProduct("AdvancedSearchDataDefinitions")> 
+<Assembly: AssemblyCopyright("Copyright © Microsoft 2012")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("bfddd4b3-8be4-4ae5-b69c-8634436e00d1")> 
+<Assembly: Guid("54bba207-bbda-4485-a5b4-5aa340fcce22")> 
 
 ' Version information for an assembly consists of the following four values:
 '
