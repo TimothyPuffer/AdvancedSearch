@@ -55,7 +55,7 @@ Public Class ASNodeManager
             Return Nothing
         End If
         UpdateColumnChooserModel(node)
-        Return node.TableColumnChooserList
+        Return node.TableColumnChooserList.OrderBy(Function(n) n.NodeTag.GetBreadthFirstIndex())
     End Function
 
     Public Function CanAddNodeType(ByVal type As Integer) As Boolean
@@ -170,7 +170,7 @@ Public Class ASNodeManager
     End Sub
 
     Private Sub CheckCreateTableChooserModel(ByVal povitNode As IASNode, ByVal node As IASNode, ByVal isAggregate As Boolean)
-        Dim ptcm As TableChooserModel = povitNode.TableColumnChooserList.FirstOrDefault(Function(n) node.Equals(n.TableTag))
+        Dim ptcm As TableChooserModel = povitNode.TableColumnChooserList.FirstOrDefault(Function(n) node.Equals(n.NodeTag))
         If ptcm Is Nothing Then
             ptcm = New TableChooserModel(node.MyName, node) With {.TableGroupVisibility = Visibility.Visible}
             povitNode.TableColumnChooserList.Add(ptcm)

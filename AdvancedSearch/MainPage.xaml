@@ -51,7 +51,7 @@
             <ItemsControl Name="lb_ColumnChooser">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding Path=TableGroupVisibility}">
                             <Border BorderThickness="1" CornerRadius="2" BorderBrush="Black" >
                                 <TextBlock Text="{Binding Path=TableName}"></TextBlock>
                             </Border>

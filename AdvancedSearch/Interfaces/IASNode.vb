@@ -25,6 +25,39 @@ End Interface
 Module IASNodeExtension
 
     <Extension()>
+    Public Function GetBreadthFirstIndex(ByVal node As IASNode) As Integer
+
+        Dim headNode = node.GetAllParentNodes().FirstOrDefault(Function(n) n.ParentNode Is Nothing)
+        If node.ParentNode Is Nothing Or headNode Is Nothing Then
+            Return 0
+        End If
+
+        Return p_GetBreadthFirstIndex(headNode, node, 0)
+
+    End Function
+
+    Private Function p_GetBreadthFirstIndex(ByVal currentNode As IASNode, ByVal nodeToFindIndexOf As IASNode, ByRef index As Integer) As Integer
+
+        If currentNode Is nodeToFindIndexOf Then
+            Return index
+        End If
+
+        For Each n In currentNode.ChildrenNodes
+            index = index + 1
+            If n Is nodeToFindIndexOf Then
+                Return index
+            End If
+        Next
+
+        For Each n In currentNode.GetAllChildrenNodes()
+            Return p_GetBreadthFirstIndex(n, nodeToFindIndexOf, index)
+        Next
+
+        Return index + 1
+
+    End Function
+
+    <Extension()>
     Public Function GetAllParentNodes(ByVal node As IASNode) As IList(Of IASNode)
 
         Dim retList = New List(Of IASNode)

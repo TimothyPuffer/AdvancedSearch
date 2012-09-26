@@ -1,8 +1,8 @@
 ﻿Public Class TableChooserModel
 
-    Public Sub New(ByVal tableName As String, ByVal tabletag As Object)
+    Public Sub New(ByVal tableName As String, ByVal nodeTag As IASNode)
         _tableName = tableName
-        _tabletag = tabletag
+        _nodeTag = nodeTag
     End Sub
 
     Dim _tableName As String = Nothing
@@ -12,10 +12,10 @@
         End Get
     End Property
 
-    Dim _tabletag As Object = Nothing
-    Public ReadOnly Property TableTag As Object
+    Dim _nodeTag As Object = Nothing
+    Public ReadOnly Property NodeTag As IASNode
         Get
-            Return _tabletag
+            Return _nodeTag
         End Get
     End Property
 
