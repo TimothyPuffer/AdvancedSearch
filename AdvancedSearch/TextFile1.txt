@@ -1,3 +1,0 @@
-﻿This is just the notepad where i will put todo list and ideas
-
--In Silverlight 4 there is PrintableDocument to make printing Silverlight controls easier

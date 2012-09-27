@@ -50,9 +50,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Services" />
+    <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web.DynamicData" />
@@ -90,6 +95,7 @@
   <ItemGroup>
     <Content Include="AdvancedSearchTestPage.aspx" />
     <Content Include="AdvancedSearchTestPage.html" />
+    <Content Include="ASDDDataService.svc" />
     <Content Include="ClientBin\AdvancedSearch.xap" />
     <Content Include="Silverlight.js" />
     <Content Include="Web.config" />
@@ -101,6 +107,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ASDDDataService.svc.vb">
+      <DependentUpon>ASDDDataService.svc</DependentUpon>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -140,7 +149,12 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AdvancedSearchDataDefinitions\AdvancedSearchDataDefinitions.vbproj">
+      <Project>{71D4A3BD-D697-42F3-87CA-D670945E9A7B}</Project>
+      <Name>AdvancedSearchDataDefinitions</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>
