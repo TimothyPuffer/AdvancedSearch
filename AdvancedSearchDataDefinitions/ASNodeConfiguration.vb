@@ -10,9 +10,6 @@ Public Class ASConfiguration
     Public ASConnectionConfigList As List(Of ASConnectionConfig)
     <DataMember()>
     Public ASNodeConfigList As List(Of ASNodeConfig)
-    'Public Property ASNodeColumnConfigList As ASNodeColumnConfig()
-    'Public Property ASNodeColumnCriteriaConfigList As ASNodeColumnCriteriaConfig()
-
 End Class
 
 <DataContract()> _
@@ -31,24 +28,6 @@ Public Class ASNodeConfig
     Public NodeType As Integer
     <DataMember()>
     Public NodeDisplayText As String
-End Class
-
-<DataContract()> _
-Public Class ASNodeColumnConfig
-    Public NodeType As Integer
-    Public ColumnType As Integer
-    Public ColumnDataType As Type
-    Public ColumnDisplayName As String
-    Public IsAggregate As Boolean
-End Class
-
-<DataContract()> _
-Public Class ASNodeColumnCriteriaConfig
-    Public NodeType As Integer
-    Public ColumnDisplayName As String
-    Public CriteriaTypeOf As Type
-    Public DefaultValue As Object
-    Public ObjectData As Object
 End Class
 
 

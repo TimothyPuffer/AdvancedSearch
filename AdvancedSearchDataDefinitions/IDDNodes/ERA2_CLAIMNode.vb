@@ -17,6 +17,8 @@
         AddColumn(2, ds.ERA2_CLAIM.PATIENT_CONTROL_NUMColumn)
         AddColumn(3, ds.ERA2_CLAIM.PATIENT_FIRST_NAMEColumn)
         AddColumn(4, ds.ERA2_CLAIM.PATIENT_LAST_NAMEColumn)
+
+        ds.Dispose()
     End Sub
 
 

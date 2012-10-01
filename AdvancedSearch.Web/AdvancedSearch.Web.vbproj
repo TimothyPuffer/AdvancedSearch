@@ -56,6 +56,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -95,7 +96,6 @@
   <ItemGroup>
     <Content Include="AdvancedSearchTestPage.aspx" />
     <Content Include="AdvancedSearchTestPage.html" />
-    <Content Include="ASDDDataService.svc" />
     <Content Include="ClientBin\AdvancedSearch.xap" />
     <Content Include="Silverlight.js" />
     <Content Include="Web.config" />
@@ -107,9 +107,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASDDDataService.svc.vb">
-      <DependentUpon>ASDDDataService.svc</DependentUpon>
-    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

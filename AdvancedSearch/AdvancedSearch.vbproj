@@ -122,11 +122,6 @@
     <Compile Include="Node_UC.xaml.vb">
       <DependentUpon>Node_UC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Service References\ASDDWebMethods\Reference.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.datasvcmap</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -144,7 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="My Project\AppManifest.xml" />
-    <None Include="Service References\ASDDWebMethods\service.edmx" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Info.png" />
@@ -153,17 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ServiceReferenceMetadataStorage Include="Service References\ASDDWebMethods\">
-      <Type>datasvcmap</Type>
-    </ServiceReferenceMetadataStorage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\ASDDWebMethods\Reference.datasvcmap">
-      <Generator>DataServiceClientGenerator</Generator>
-      <LastGenOutput>Reference.vb</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

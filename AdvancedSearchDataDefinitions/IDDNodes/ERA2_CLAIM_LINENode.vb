@@ -19,5 +19,8 @@
         AddColumn(4, ds.ERA2_CLAIM_LINE.CHARGESColumn)
         AddColumn(5, ds.ERA2_CLAIM_LINE.PAYMENTColumn)
         AddColumn(6, ds.ERA2_CLAIM_LINE.PATIENT_RESP_AMOUNTColumn)
+
+
+        ds.Dispose()
     End Sub
 End Class
