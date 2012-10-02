@@ -11,7 +11,7 @@
         Dim ds As ASDataSet = New ASDataSet
 
         SetPrimaryTable(ds.ERA2_CLAIM_CAS)
-        AddColumn(1, ds.ERA2_CLAIM_CAS.AMOUNTColumn)
+        AddColumnAggregate(1, ds.ERA2_CLAIM_CAS.AMOUNTColumn)
 
 
         ds.Dispose()

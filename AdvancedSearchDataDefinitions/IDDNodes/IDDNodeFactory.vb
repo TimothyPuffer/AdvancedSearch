@@ -32,6 +32,7 @@ Public Class IDDNodeFactory
             Dim iterN = n
             ret.ASNodeConfigList.Add(New ASNodeConfig With {.NodeType = n.NodeType, .NodeDisplayText = n.DisplayName})
             n.GetChildNodeJoins.ForEach(Sub(j) ret.ASConnectionConfigList.Add(New ASConnectionConfig With {.ChildNodeType = j.Key, .ParentNodeType = iterN.NodeType, .ConnectionType = j.Value}))
+            n.GetColumnChoosingInfo().ForEach(Sub(c) ret.ASNodeColumnConfigList.Add(c))
         Next
         Return ret
     End Function

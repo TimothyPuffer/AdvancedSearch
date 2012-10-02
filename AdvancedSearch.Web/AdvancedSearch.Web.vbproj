@@ -14,7 +14,8 @@
     <AssemblyName>AdvancedSearch.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MyType>Custom</MyType>
-    <SilverlightApplicationList>{8EEF2213-1C36-4FEA-9155-138C56E1204B}|..\AdvancedSearch\AdvancedSearch.vbproj|ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

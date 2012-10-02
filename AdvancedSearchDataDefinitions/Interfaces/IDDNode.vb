@@ -6,6 +6,8 @@
 
     Function GetChildNodeJoins() As List(Of KeyValuePair(Of DDNodeEnum, String))
 
+    Function GetColumnChoosingInfo() As List(Of ASNodeColumnConfig)
+
 
 End Interface
 
