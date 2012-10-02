@@ -34,7 +34,7 @@
 #End Region
 
 #Region "top part mouse handles"
-    Dim isMouseCaptured As Boolean
+    Dim isMyMouseCaptured As Boolean
     Dim mouseVerticalPosition As Double
     Dim mouseHorizontalPosition As Double
     Private Sub Node_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -42,14 +42,14 @@
         If (AllowMove) Then
             mouseVerticalPosition = e.GetPosition(Nothing).Y
             mouseHorizontalPosition = e.GetPosition(Nothing).X
-            isMouseCaptured = True
+            isMyMouseCaptured = True
             item.CaptureMouse()
         End If
     End Sub
 
     Private Sub Node_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs)
         Dim item As UIElement = sender
-        If (isMouseCaptured) Then
+        If (isMyMouseCaptured) Then
             Dim deltaV As Double = e.GetPosition(Nothing).Y - mouseVerticalPosition
             Dim deltaH As Double = e.GetPosition(Nothing).X - mouseHorizontalPosition
             Dim newTop As Double = deltaV + Me.GetValue(Canvas.TopProperty)
@@ -66,8 +66,8 @@
 
     Private Sub Node_MouseLeftButtonUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
         Dim item As UIElement = sender
-        If isMouseCaptured Then
-            isMouseCaptured = False
+        If isMyMouseCaptured Then
+            isMyMouseCaptured = False
             item.ReleaseMouseCapture()
             mouseVerticalPosition = -1
             mouseHorizontalPosition = -1

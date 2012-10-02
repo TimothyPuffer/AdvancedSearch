@@ -1,11 +1,13 @@
 ﻿Imports System.Collections.ObjectModel
 Imports AdvancedSearchDataDefinitions
 
-Public Class ASNodeManager
+Public Class ASNodeManager(Of NodeT, LineT)
 
     Dim _isLoaded As Boolean = False
     Dim _ASNodeConfiguration As ASConfiguration = Nothing
     Dim _nodeList As New List(Of IASNode)
+    Dim _nodeListTop As New Dictionary(Of NodeT, List(Of LineT))
+    Dim _nodeListBot As New Dictionary(Of NodeT, List(Of LineT))
 
 #Region "AsyncLoading"
 
@@ -35,6 +37,18 @@ Public Class ASNodeManager
 #End Region
 
 #Region "Public Properties"
+
+    Public ReadOnly Property NodeListTop As Dictionary(Of NodeT, List(Of LineT))
+        Get
+            Return _nodeListTop
+        End Get
+    End Property
+
+    Public ReadOnly Property NodeListBot As Dictionary(Of NodeT, List(Of LineT))
+        Get
+            Return _nodeListBot
+        End Get
+    End Property
 
     Public ReadOnly Property NodeList As ReadOnlyCollection(Of IASNode)
         Get
@@ -71,6 +85,7 @@ Public Class ASNodeManager
 
         Dim node = CreateNode(type, nodeID, tag)
         _nodeList.Add(node)
+
         Return node
     End Function
 

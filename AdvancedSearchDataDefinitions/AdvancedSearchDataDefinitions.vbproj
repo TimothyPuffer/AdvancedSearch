@@ -83,6 +83,7 @@
     <Compile Include="IDDNodes\ERA2_CLAIMNode.vb" />
     <Compile Include="IDDNodes\ERA2_CLAIM_CASNode.vb" />
     <Compile Include="IDDNodes\ERA2_CLAIM_LINENode.vb" />
+    <Compile Include="Interfaces\IDDCriteria.vb" />
     <Compile Include="Interfaces\IDDNode.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

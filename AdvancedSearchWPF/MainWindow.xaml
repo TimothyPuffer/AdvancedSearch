@@ -7,14 +7,12 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"></ColumnDefinition>
+            <ColumnDefinition Width="110"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="200"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
-            <Button Name="btn_AddNode" Click="Button_Click" Margin="10,5,10,5">
-                <TextBlock>Add Node</TextBlock>
-            </Button>
+            <Button Name="btn_AddNode" Content="Add Node" Click="Button_Click" Margin="10,5,10,5"></Button>
             <ListBox Name="lb_ResourceType" SelectionChanged="lb_ResourceType_SelectionChanged" >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -26,13 +24,11 @@
                 </ItemsControl.ItemTemplate>
             </ListBox>
         </StackPanel>
-        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto">
-            <StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Button Name="btn_delete_node" Click="btn_delete_node_Click" IsEnabled="False" Margin="5">
-                        <TextBlock>Delete Node</TextBlock>
-                    </Button>
-                </StackPanel>
+        <DockPanel Grid.Column="1">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Button Name="btn_delete_node" Content="Delete Node" Click="btn_delete_node_Click" IsEnabled="False" Margin="10,5,10,5"></Button>
+            </StackPanel>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <Canvas Name="canvasNodeDisplay" 
                     Background="White"
                     Height="800"
@@ -40,29 +36,34 @@
                     MouseMove="canvasNodeDisplay_MouseMove"
                     MouseLeftButtonUp="canvasNodeDisplay_MouseLeftButtonUp">
                 </Canvas>
-            </StackPanel>
-        </ScrollViewer>
-        <StackPanel Grid.Column="2">
-            <ItemsControl Name="lb_ColumnChooser">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Visibility="{Binding Path=TableGroupVisibility}">
-                            <Border BorderThickness="1" CornerRadius="2" BorderBrush="Black" >
-                                <TextBlock Text="{Binding Path=TableName}"></TextBlock>
-                            </Border>
-                            <ItemsControl ItemsSource="{Binding Path=ColumnChooserList}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Visibility="{Binding Path=ColumnVisibility}">
-                                            <CheckBox IsChecked="{Binding Path=ColumnIsSelected,Mode=TwoWay}" Content="{Binding Path=ColumnDisplayName}"></CheckBox>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+        <TabControl Grid.Column="2">
+            <TabItem Header="Columns">
+                <ItemsControl Name="lb_ColumnChooser">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Visibility="{Binding Path=TableGroupVisibility}">
+                                <Border BorderThickness="1" CornerRadius="2" BorderBrush="Black" >
+                                    <TextBlock Text="{Binding Path=TableName}"></TextBlock>
+                                </Border>
+                                <ItemsControl ItemsSource="{Binding Path=ColumnChooserList}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Visibility="{Binding Path=ColumnVisibility}">
+                                                <CheckBox IsChecked="{Binding Path=ColumnIsSelected,Mode=TwoWay}" Content="{Binding Path=ColumnDisplayName}"></CheckBox>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </TabItem>
+            <TabItem Header="Criteria">
+                
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

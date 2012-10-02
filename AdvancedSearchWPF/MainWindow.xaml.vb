@@ -1,10 +1,7 @@
 ﻿Class MainWindow 
     Private Shared ReadOnly __DefaultNodePosition As New Point(10, 10)
 
-    Dim _manager As New ASNodeManager
-
-    Dim _nodeListTop As New Dictionary(Of Node_UC, List(Of Line))
-    Dim _nodeListBot As New Dictionary(Of Node_UC, List(Of Line))
+    Dim _manager As New ASNodeManager(Of Node_UC, Line)
 
     Public Sub New()
         InitializeComponent()
@@ -27,7 +24,7 @@
 
     Dim _selectedNode As Node_UC = Nothing
     Private Sub Node_Selected(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
-        For Each n In _nodeListTop
+        For Each n In _manager.NodeListTop
             n.Key.SetIsSelected(False)
         Next
 
@@ -50,8 +47,8 @@
         Dim selectedIASN = _manager.NodeList.First(Function(n) n.Tag.Equals(_selectedNode))
         _manager.DeleteNode(selectedIASN)
 
-        DeleteUIElementConnection(_nodeListBot)
-        DeleteUIElementConnection(_nodeListTop)
+        DeleteUIElementConnection(_manager.NodeListBot)
+        DeleteUIElementConnection(_manager.NodeListTop)
         If canvasNodeDisplay.Children.Contains(_selectedNode) Then
             canvasNodeDisplay.Children.Remove(_selectedNode)
         End If
@@ -107,17 +104,17 @@
             SetLineEndToCenter(_tmpConnectingLine, sender.top_part)
 
             Dim addlist As List(Of Line) = Nothing
-            If _nodeListTop.TryGetValue(_tmpConnectingNode, addlist) Then
+            If _manager.NodeListTop.TryGetValue(_tmpConnectingNode, addlist) Then
                 addlist.Add(_tmpConnectingLine)
             End If
 
             addlist = Nothing
-            If _nodeListBot.TryGetValue(sender, addlist) Then
+            If _manager.NodeListBot.TryGetValue(sender, addlist) Then
                 addlist.Add(_tmpConnectingLine)
             Else
                 Dim nl As New List(Of Line)
                 nl.Add(_tmpConnectingLine)
-                _nodeListBot.Add(sender, nl)
+                _manager.NodeListBot.Add(sender, nl)
             End If
 
             _tmpConnectingLine = Nothing
@@ -127,14 +124,14 @@
 
     Private Sub Node_Move(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseEventArgs)
         Dim addlist As List(Of Line) = Nothing
-        If _nodeListTop.TryGetValue(sender, addlist) Then
+        If _manager.NodeListTop.TryGetValue(sender, addlist) Then
             For Each cl In addlist
                 SetLineStartToCenter(cl, sender.bottom_part)
             Next
         End If
 
         addlist = Nothing
-        If _nodeListBot.TryGetValue(sender, addlist) Then
+        If _manager.NodeListBot.TryGetValue(sender, addlist) Then
             For Each cl In addlist
                 SetLineEndToCenter(cl, sender.top_part)
             Next
@@ -228,7 +225,7 @@
     End Sub
 
     Private Function GetStartNode(ByVal cline) As Node_UC
-        For Each kv In _nodeListTop
+        For Each kv In _manager.NodeListTop
             If kv.Value.Contains(cline) Then
                 Return kv.Key
             End If
@@ -250,7 +247,7 @@
         AddHandler node.ConnectorMouseLeftButtonDown, AddressOf Connector_Selected
         AddHandler node.NodeMove, AddressOf Node_Move
 
-        _nodeListTop.Add(node, New List(Of Line))
+        _manager.NodeListTop.Add(node, New List(Of Line))
         Node_Selected(node, Nothing)
     End Sub
 
