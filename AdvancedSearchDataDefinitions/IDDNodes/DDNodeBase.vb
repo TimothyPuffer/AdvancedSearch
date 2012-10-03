@@ -28,6 +28,10 @@ Public MustInherit Class DDNodeBase
                                                                              .IsAggregate = True}).ToList().ForEach(Sub(c) ret.Add(c))
         Return ret
     End Function
+
+    Public Function GetNodeCriteria() As Dictionary(Of Integer, IDDCriteria) Implements IDDNode.GetNodeCriteria
+        Return _criteriaList
+    End Function
 #End Region
 
 #Region "Table Rule Configuration"
@@ -65,6 +69,11 @@ Public MustInherit Class DDNodeBase
                           .ChildColumns = childColumns.Select(Function(c) c.ColumnName).ToArray(),
                           .JoinName = j})
         Next
+    End Sub
+
+    Dim _criteriaList As New Dictionary(Of Integer, IDDCriteria)
+    Public Sub AddCriteria(ByVal index As Integer, ByVal criteria As IDDCriteria)
+        _criteriaList.Add(index, criteria)
     End Sub
 #End Region
 

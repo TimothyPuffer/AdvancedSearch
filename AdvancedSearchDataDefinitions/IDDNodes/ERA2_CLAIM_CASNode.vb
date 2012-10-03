@@ -13,6 +13,7 @@
         SetPrimaryTable(ds.ERA2_CLAIM_CAS)
         AddColumnAggregate(1, ds.ERA2_CLAIM_CAS.AMOUNTColumn)
 
+        AddCriteria(1, New DoubleStringDDCriteria("Lower Revenue Code", "Upper Revenue Code", "", ""))
 
         ds.Dispose()
     End Sub

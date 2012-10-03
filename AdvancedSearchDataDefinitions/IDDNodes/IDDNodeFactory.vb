@@ -1,5 +1,5 @@
 ﻿Imports AdvancedSearchDataDefinitions
-Public Class IDDNodeFactory
+Public NotInheritable Class IDDNodeFactory
 
     Dim _factoryDictionary As New Dictionary(Of DDNodeEnum, Func(Of IDDNode))
     Public Sub New()
@@ -8,7 +8,7 @@ Public Class IDDNodeFactory
         _factoryDictionary.Add(DDNodeEnum.ERA2_CLAIM_CAS, Function() New ERA2_CLAIM_CASNode)
     End Sub
 
-    Public Function GetNode(ByVal nodeEnum As DDNodeEnum) As IDDNode
+    Private Function GetNode(ByVal nodeEnum As DDNodeEnum) As IDDNode
         Dim ret = _factoryDictionary(nodeEnum)()
         If ret.NodeType <> nodeEnum Then
             Throw New Exception("Fix the Code so that the factory method IDDNode.NodeType match the nodeEnum")
@@ -35,6 +35,10 @@ Public Class IDDNodeFactory
             n.GetColumnChoosingInfo().ForEach(Sub(c) ret.ASNodeColumnConfigList.Add(c))
         Next
         Return ret
+    End Function
+
+    Public Function GetASNodeCriteria(ByVal nodeType As DDNodeEnum) As Dictionary(Of Integer, IDDCriteria)
+        Return GetNode(nodeType).GetNodeCriteria()
     End Function
 
 End Class

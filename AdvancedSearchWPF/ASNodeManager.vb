@@ -9,32 +9,10 @@ Public Class ASNodeManager(Of NodeT, LineT)
     Dim _nodeListTop As New Dictionary(Of NodeT, List(Of LineT))
     Dim _nodeListBot As New Dictionary(Of NodeT, List(Of LineT))
 
-#Region "AsyncLoading"
-
-    Public ReadOnly Property IsLoaded As Boolean
-        Get
-            Return _isLoaded
-        End Get
-    End Property
-
-    Dim _callback As Action(Of Object)
-    Public Sub LoadAsync(callback As Action(Of Object))
-        _callback = callback
-        Dim loadM As New ModelLoader
-        If (_isLoaded = False) Then
-            loadM.LoadNodeConfiguration(AddressOf mycallback)
-        End If
+    Public Sub New()
+        Dim fac = New IDDNodeFactory
+        _ASNodeConfiguration = fac.GetASNodeConfiguration()
     End Sub
-
-    Private Sub mycallback(config As ASConfiguration)
-        _ASNodeConfiguration = config
-        _isLoaded = True
-        If _callback IsNot Nothing Then
-            _callback(Me)
-        End If
-    End Sub
-
-#End Region
 
 #Region "Public Properties"
 
@@ -73,7 +51,7 @@ Public Class ASNodeManager(Of NodeT, LineT)
         Return node.TableColumnChooserList.OrderBy(Function(n) n.NodeTag.GetBreadthFirstIndex())
     End Function
 
-    Public Function CanAddNodeType(ByVal type As Integer) As Boolean
+    Public Function CanAddNodeType(ByVal type As DDNodeEnum) As Boolean
         Return _ASNodeConfiguration.ASNodeConfigList.FirstOrDefault(Function(node) node.NodeType = type) IsNot Nothing
     End Function
 
@@ -167,9 +145,10 @@ Public Class ASNodeManager(Of NodeT, LineT)
 #End Region
 
 #Region "Factory Methods"
-    Public Function CreateNode(ByVal nodeType As Integer, ByVal nodeID As Integer, ByVal tag As Object) As IASNode
+    Public Function CreateNode(ByVal nodeType As DDNodeEnum, ByVal nodeID As Integer, ByVal tag As Object) As IASNode
         Dim disText = _ASNodeConfiguration.ASNodeConfigList.First(Function(n) n.NodeType = nodeType).NodeDisplayText
-        Return New ASNodeBase(nodeID, String.Format("{0}({1})", disText, nodeID), disText, nodeType, tag)
+        Dim fac = New IDDNodeFactory
+        Return New ASNodeBase(nodeID, String.Format("{0}({1})", disText, nodeID), disText, nodeType, tag, fac.GetASNodeCriteria(nodeType))
     End Function
 
     Public Sub UpdateColumnChooserModel(ByVal node As IASNode)
@@ -196,7 +175,7 @@ Public Class ASNodeManager(Of NodeT, LineT)
         FillTableChooserModelNormal(ptcm, node.NodeType, isAggregate)
     End Sub
 
-    Private Sub FillTableChooserModelNormal(ByVal tcm As TableChooserModel, ByVal nodeType As Integer, ByVal isAggregate As Boolean)
+    Private Sub FillTableChooserModelNormal(ByVal tcm As TableChooserModel, ByVal nodeType As DDNodeEnum, ByVal isAggregate As Boolean)
         For Each nodeConfig In _ASNodeConfiguration.ASNodeColumnConfigList.Where(Function(n) n.NodeType.Equals(nodeType))
 
             Dim iterNodeConfig = nodeConfig

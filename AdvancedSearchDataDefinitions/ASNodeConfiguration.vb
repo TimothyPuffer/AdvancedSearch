@@ -11,19 +11,19 @@ Public Class ASConfiguration
 End Class
 
 Public Class ASConnectionConfig
-    Public ParentNodeType As Integer
-    Public ChildNodeType As Integer
+    Public ParentNodeType As DDNodeEnum
+    Public ChildNodeType As DDNodeEnum
     Public ConnectionType As String
 End Class
 
 Public Class ASNodeConfig
-    Public NodeType As Integer
+    Public NodeType As DDNodeEnum
     Public NodeDisplayText As String
 End Class
 
 Public Class ASNodeColumnConfig
     Public ColumnID As Integer
-    Public NodeType As Integer
+    Public NodeType As DDNodeEnum
     Public ColumnDisplayName As String
     Public IsAggregate As Boolean
 End Class

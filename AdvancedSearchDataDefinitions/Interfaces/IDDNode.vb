@@ -8,6 +8,7 @@
 
     Function GetColumnChoosingInfo() As List(Of ASNodeColumnConfig)
 
+    Function GetNodeCriteria() As Dictionary(Of Integer, IDDCriteria)
 
 End Interface
 

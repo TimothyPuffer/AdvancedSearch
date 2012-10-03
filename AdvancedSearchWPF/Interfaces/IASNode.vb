@@ -1,4 +1,4 @@
-﻿
+﻿Imports AdvancedSearchDataDefinitions
 
 Public Interface IASNode
     Inherits IMultiChildNode
@@ -7,11 +7,13 @@ Public Interface IASNode
 
     ReadOnly Property TableColumnChooserList As List(Of TableChooserModel)
 
+    ReadOnly Property NodeCriteriaList As List(Of IDDCriteria)
+
     ReadOnly Property MyName As String
 
     ReadOnly Property NodeID As Integer
 
-    ReadOnly Property NodeType As Integer
+    ReadOnly Property NodeType As DDNodeEnum
 
     ReadOnly Property NodeText As String
 

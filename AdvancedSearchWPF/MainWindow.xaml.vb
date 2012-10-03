@@ -5,15 +5,7 @@
 
     Public Sub New()
         InitializeComponent()
-        Me.IsEnabled = False
-        _manager.LoadAsync(AddressOf loadComplete)
-    End Sub
-
-    Private Sub loadComplete(send As Object)
-        If (_manager.IsLoaded) Then
-            Me.IsEnabled = True
-            InitializeSources()
-        End If
+        InitializeSources()
     End Sub
 
 #Region "Events"
