@@ -62,7 +62,9 @@
                 </ItemsControl>
             </TabItem>
             <TabItem Header="Criteria">
-                
+                <ItemsControl Name="ic_Criteria">
+                    
+                </ItemsControl>
             </TabItem>
         </TabControl>
     </Grid>

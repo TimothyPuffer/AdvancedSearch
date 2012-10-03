@@ -68,6 +68,7 @@
     </ApplicationDefinition>
     <Compile Include="ASEnum.vb" />
     <Compile Include="ASNodeManager.vb" />
+    <Compile Include="CriteriaDataTemplateSelector.vb" />
     <Compile Include="Interfaces\IMultiChildNode.vb" />
     <Compile Include="NodeFactory\ASNodeBase.vb" />
     <Compile Include="NodeFactory\ColumnChooserModel.vb" />

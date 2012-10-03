@@ -30,4 +30,5 @@
     Public Sub Intialize() Implements IDDCriteria.Intialize
 
     End Sub
+
 End Class

@@ -17,6 +17,7 @@ Public Class ASNodeBase
         _nodeType = nodeType
         _tag = tag
         _tableColumnChooserList = New List(Of TableChooserModel)
+        _nodeCriteriaList = nodeCriteriaList
     End Sub
 
     Public ReadOnly Property NodeID As Integer Implements IASNode.NodeID
@@ -61,8 +62,8 @@ Public Class ASNodeBase
 
     Public Property ParentNode As IMultiChildNode = Nothing Implements IMultiChildNode.ParentNode
 
-    Dim _nodeCriteriaList As List(Of IDDCriteria)
-    Public ReadOnly Property NodeCriteriaList As List(Of IDDCriteria) Implements IASNode.NodeCriteriaList
+    Dim _nodeCriteriaList As Dictionary(Of Integer, IDDCriteria)
+    Public ReadOnly Property NodeCriteriaList As Dictionary(Of Integer, IDDCriteria) Implements IASNode.NodeCriteriaList
         Get
             Return _nodeCriteriaList
         End Get

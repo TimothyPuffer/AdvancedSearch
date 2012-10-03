@@ -26,7 +26,9 @@
         End If
         lb_ColumnChooser.ItemsSource = Nothing
         Dim selectedIASN = _manager.NodeList.FirstOrDefault(Function(n) n.Tag.Equals(sender))
-        lb_ColumnChooser.ItemsSource = _manager.SetSelectedNode(selectedIASN)
+        _manager.SetSelectedNode(selectedIASN)
+        lb_ColumnChooser.ItemsSource = _manager.GetColumnItemSource()
+        ic_Criteria.ItemsSource = _manager.GetCriteriaItemSource()
         btn_delete_node.IsEnabled = _manager.CanDeleteNode(selectedIASN)
     End Sub
 
@@ -249,6 +251,9 @@
 
     Private Shared __DefaultImagePath = "Images/Info.png"
     Private Sub InitializeSources()
+
+        ic_Criteria.ItemTemplateSelector = New CriteriaDataTemplateSelector
+
         Dim _proxyLookup As New Dictionary(Of Integer, String)
         For Each n In _manager.MyASNodeConfiguration.ASNodeConfigList
             _proxyLookup.Add(n.NodeType, n.NodeDisplayText)

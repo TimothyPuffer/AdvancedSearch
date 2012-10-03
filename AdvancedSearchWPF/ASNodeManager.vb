@@ -42,13 +42,24 @@ Public Class ASNodeManager(Of NodeT, LineT)
 #End Region
 
 #Region "Public Methods"
+    Dim _selectedNode As IASNode = Nothing
+    Public Sub SetSelectedNode(ByVal node As IASNode)
+        _selectedNode = node
+    End Sub
 
-    Public Function SetSelectedNode(ByVal node As IASNode) As Object
-        If node Is Nothing Then
+    Public Function GetColumnItemSource() As Object
+        If _selectedNode Is Nothing Then
             Return Nothing
         End If
-        UpdateColumnChooserModel(node)
-        Return node.TableColumnChooserList.OrderBy(Function(n) n.NodeTag.GetBreadthFirstIndex())
+        UpdateColumnChooserModel(_selectedNode)
+        Return _selectedNode.TableColumnChooserList.OrderBy(Function(n) n.NodeTag.GetBreadthFirstIndex())
+    End Function
+
+    Public Function GetCriteriaItemSource() As Object
+        If _selectedNode Is Nothing Then
+            Return Nothing
+        End If
+        Return _selectedNode.NodeCriteriaList
     End Function
 
     Public Function CanAddNodeType(ByVal type As DDNodeEnum) As Boolean

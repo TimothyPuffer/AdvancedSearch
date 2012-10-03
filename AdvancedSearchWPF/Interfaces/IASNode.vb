@@ -7,7 +7,7 @@ Public Interface IASNode
 
     ReadOnly Property TableColumnChooserList As List(Of TableChooserModel)
 
-    ReadOnly Property NodeCriteriaList As List(Of IDDCriteria)
+    ReadOnly Property NodeCriteriaList As Dictionary(Of Integer, IDDCriteria)
 
     ReadOnly Property MyName As String
 
