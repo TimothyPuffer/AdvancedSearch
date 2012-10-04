@@ -130,7 +130,8 @@ Public Class ASNodeManager(Of NodeT, LineT)
                 Return ASNodeDisplayState.NotDrop
             End If
         Else
-            Dim rootNode = _nodeList.OrderBy(Function(n) n.NodeID).FirstOrDefault(Function(n) n.ParentNode Is Nothing)
+            Dim rootNode = _nodeList.OrderByDescending(Function(n) n.GetAllChildrenNodes.Count).FirstOrDefault(Function(n) n.ParentNode Is Nothing)
+            Dim iAmMyOwnParent = node.GetAllChildrenNodes.Contains(node)
             If node.ParentNode Is Nothing And node IsNot rootNode Then
                 Return ASNodeDisplayState.ErrorState
             Else

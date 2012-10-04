@@ -11,7 +11,7 @@ Public Class CriteriaDataTemplateSelector
             Case GetType(DoubleStringDDCriteria)
                 Return fwe.FindResource("DoubleStringDDCriteriaDataTemplate")
             Case Else
-                Return Nothing
+                Return fwe.FindResource("ErrorDataTemplate")
         End Select
 
     End Function
