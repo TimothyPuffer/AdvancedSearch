@@ -20,6 +20,7 @@
         AddColumn(5, ds.ERA2_CLAIM_LINE.PAYMENTColumn)
         AddColumn(6, ds.ERA2_CLAIM_LINE.PATIENT_RESP_AMOUNTColumn)
 
+        AddCriteria(1, New DoubleStringDDCriteria("Lower Revenue Code", "Upper Revenue Code", "", ""))
 
         ds.Dispose()
     End Sub
