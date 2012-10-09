@@ -27,6 +27,7 @@
         <DockPanel Grid.Column="1">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Button Name="btn_delete_node" Content="Delete Node" Click="btn_delete_node_Click" IsEnabled="False" Margin="10,5,10,5"></Button>
+                <Button Name="btn_Dynamic_Generator" Content="Generate SQL" Margin="10,5,10,5"></Button>
             </StackPanel>
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <Canvas Name="canvasNodeDisplay" 
@@ -51,7 +52,7 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Visibility="{Binding Path=ColumnVisibility}">
-                                                <CheckBox IsChecked="{Binding Path=ColumnIsSelected,Mode=TwoWay}" Content="{Binding Path=ColumnDisplayName}"></CheckBox>
+                                                <CheckBox IsChecked="{Binding Path=ColumnIsSelected}" Content="{Binding Path=ColumnDisplayName}"></CheckBox>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>

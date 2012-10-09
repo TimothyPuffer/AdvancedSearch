@@ -57,6 +57,15 @@ Module IMultiChildNodeExtension
     End Function
 
     <Extension()>
+    Public Function GetRootNode(ByVal node As IMultiChildNode) As IMultiChildNode
+
+        If (node.ParentNode Is Nothing) Then
+            Return node
+        End If
+        Return node.GetAllParentNodes.First(Function(n) n.ParentNode Is Nothing)
+    End Function
+
+    <Extension()>
     Public Function GetAllChildrenNodes(ByVal node As IMultiChildNode) As IList(Of IMultiChildNode)
 
         Dim retList = New List(Of IMultiChildNode)

@@ -78,6 +78,7 @@
       <DependentUpon>ASDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="ASNodeConfiguration.vb" />
+    <Compile Include="Generators\DynamicSQLGenerator.vb" />
     <Compile Include="IDDCriterias\DoubleStringDDCriteria.vb" />
     <Compile Include="IDDNodes\IDDNodeFactory.vb" />
     <Compile Include="IDDNodes\DDNodeBase.vb" />

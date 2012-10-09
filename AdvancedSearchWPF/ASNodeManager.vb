@@ -206,4 +206,32 @@ Public Class ASNodeManager(Of NodeT, LineT)
 
 #End Region
 
+#Region "Generators"
+    Public Sub GenerateDynamicSQL()
+        Dim generator As New DynamicSQLGenerator
+        Dim root As IASNode = _selectedNode.GetRootNode()
+        generator.AddRootNode(root.NodeType, root.MyName)
+
+        root.ChildrenNodes.ForEach(Sub(n) r_GenerateDynamicSQL(root.MyName, n, generator))
+
+        For Each cNode In root.TableColumnChooserList
+            Dim iterCNode = cNode
+            cNode.ColumnChooserList.Where(Function(c) c.ColumnIsSelected And c.ColumnVisibility = Visibility.Visible).ToList().ForEach(Sub(c) generator.AddColumnToNode(iterCNode.TableName, iterCNode.TableName, c.ColumnDisplayName))
+        Next
+
+        For Each node As IASNode In root.GetAllChildrenNodes()
+            Dim iterNode = node
+            For Each cNode In node.TableColumnChooserList
+                Dim iterCNode = cNode
+                cNode.ColumnChooserList.Where(Function(c) c.ColumnIsSelected And c.ColumnVisibility = Visibility.Visible).ToList().ForEach(Sub(c) generator.AddColumnToNode(iterNode.MyName, iterCNode.TableName, c.ColumnDisplayName))
+            Next
+        Next
+    End Sub
+
+    Private Sub r_GenerateDynamicSQL(ByVal parentNodeName As String, ByVal node As IASNode, ByVal generator As DynamicSQLGenerator)
+        generator.AddChildNode(node.MyName, node.NodeType)
+        node.ChildrenNodes.ForEach(Sub(n) r_GenerateDynamicSQL(node.MyName, n, generator))
+    End Sub
+#End Region
+
 End Class

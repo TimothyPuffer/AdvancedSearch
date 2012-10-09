@@ -14,6 +14,10 @@
         AddNode(lb_ResourceType.SelectedItem)
     End Sub
 
+    Private Sub btn_Dynamic_Generator_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btn_Dynamic_Generator.Click
+        _manager.GenerateDynamicSQL()
+    End Sub
+
     Dim _selectedNode As Node_UC = Nothing
     Private Sub Node_Selected(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
         For Each n In _manager.NodeListTop
