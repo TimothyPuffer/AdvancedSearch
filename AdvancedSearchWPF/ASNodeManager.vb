@@ -226,10 +226,13 @@ Public Class ASNodeManager(Of NodeT, LineT)
                 cNode.ColumnChooserList.Where(Function(c) c.ColumnIsSelected And c.ColumnVisibility = Visibility.Visible).ToList().ForEach(Sub(c) generator.AddColumnToNode(iterNode.MyName, iterCNode.TableName, c.ColumnDisplayName))
             Next
         Next
+
+        generator.GetSingleNodeDynamicSQL(_selectedNode.MyName)
+
     End Sub
 
     Private Sub r_GenerateDynamicSQL(ByVal parentNodeName As String, ByVal node As IASNode, ByVal generator As DynamicSQLGenerator)
-        generator.AddChildNode(node.MyName, node.NodeType)
+        generator.AddChildNode(parentNodeName, node.MyName, node.NodeType)
         node.ChildrenNodes.ForEach(Sub(n) r_GenerateDynamicSQL(node.MyName, n, generator))
     End Sub
 #End Region

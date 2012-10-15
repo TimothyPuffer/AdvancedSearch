@@ -1,14 +1,21 @@
 ﻿Public Interface IDDNode
+    Inherits IMultiChildNode
 
     ReadOnly Property NodeType As DDNodeEnum
 
-    ReadOnly Property DisplayName As String
+    Property DisplayName As String
+
+    Sub AddColumn(ByVal nodeName As String, ByVal columnName As String)
 
     Function GetChildNodeJoins() As List(Of KeyValuePair(Of DDNodeEnum, String))
 
     Function GetColumnChoosingInfo() As List(Of ASNodeColumnConfig)
 
     Function GetNodeCriteria() As Dictionary(Of Integer, IDDCriteria)
+
+    Function GetNodeSQL() As String
+
+    Function GetChildNodeSQL(ByVal columnMap As List(Of KeyValuePair(Of String, String)), ByVal parentNodeNameAlias As String, ByVal parentColumns As DataColumn(), ByVal childColumns As DataColumn())
 
 End Interface
 

@@ -78,6 +78,7 @@
       <DependentUpon>ASDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="ASNodeConfiguration.vb" />
+    <Compile Include="ExtensionMethods.vb" />
     <Compile Include="Generators\DynamicSQLGenerator.vb" />
     <Compile Include="IDDCriterias\DoubleStringDDCriteria.vb" />
     <Compile Include="IDDNodes\IDDNodeFactory.vb" />
@@ -87,6 +88,7 @@
     <Compile Include="IDDNodes\ERA2_CLAIM_LINENode.vb" />
     <Compile Include="Interfaces\IDDCriteria.vb" />
     <Compile Include="Interfaces\IDDNode.vb" />
+    <Compile Include="Interfaces\IMultiChildNode.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

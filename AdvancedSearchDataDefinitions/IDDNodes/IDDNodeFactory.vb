@@ -8,8 +8,9 @@ Public NotInheritable Class IDDNodeFactory
         _factoryDictionary.Add(DDNodeEnum.ERA2_CLAIM_CAS, Function() New ERA2_CLAIM_CASNode)
     End Sub
 
-    Private Function GetNode(ByVal nodeEnum As DDNodeEnum) As IDDNode
+    Public Function GetNode(ByVal nodeEnum As DDNodeEnum, ByVal displayName As String) As IDDNode
         Dim ret = _factoryDictionary(nodeEnum)()
+        ret.DisplayName = displayName
         If ret.NodeType <> nodeEnum Then
             Throw New Exception("Fix the Code so that the factory method IDDNode.NodeType match the nodeEnum")
         End If
@@ -19,7 +20,7 @@ Public NotInheritable Class IDDNodeFactory
     Public Function GetAllNodes() As List(Of IDDNode)
         Dim retList As New List(Of IDDNode)
         For Each kv In _factoryDictionary
-            retList.Add(GetNode(kv.Key))
+            retList.Add(GetNode(kv.Key, Nothing))
         Next
         Return retList
     End Function
@@ -38,7 +39,7 @@ Public NotInheritable Class IDDNodeFactory
     End Function
 
     Public Function GetASNodeCriteria(ByVal nodeType As DDNodeEnum) As Dictionary(Of Integer, IDDCriteria)
-        Return GetNode(nodeType).GetNodeCriteria()
+        Return GetNode(nodeType, Nothing).GetNodeCriteria()
     End Function
 
 End Class

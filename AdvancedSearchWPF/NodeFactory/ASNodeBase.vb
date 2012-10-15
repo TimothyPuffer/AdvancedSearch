@@ -58,14 +58,20 @@ Public Class ASNodeBase
         End Get
     End Property
 
-    Public Property ChildrenNodes As New List(Of IMultiChildNode) Implements IMultiChildNode.ChildrenNodes
-
-    Public Property ParentNode As IMultiChildNode = Nothing Implements IMultiChildNode.ParentNode
-
     Dim _nodeCriteriaList As Dictionary(Of Integer, IDDCriteria)
     Public ReadOnly Property NodeCriteriaList As Dictionary(Of Integer, IDDCriteria) Implements IASNode.NodeCriteriaList
         Get
             Return _nodeCriteriaList
         End Get
     End Property
+
+    Dim _childrenNodes As New List(Of IMultiChildNode)
+    Public ReadOnly Property ChildrenNodes As List(Of IMultiChildNode) Implements IMultiChildNode.ChildrenNodes
+        Get
+            Return _childrenNodes
+        End Get
+    End Property
+
+    Public Property ParentNode As IMultiChildNode Implements IMultiChildNode.ParentNode
+
 End Class

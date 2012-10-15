@@ -6,10 +6,13 @@ Public MustInherit Class DDNodeBase
     Dim _primaryTable As String = Nothing
     Public MustOverride ReadOnly Property NodeType As DDNodeEnum Implements IDDNode.NodeType
 
-    Public ReadOnly Property DisplayName As String Implements IDDNode.DisplayName
+    Public Property DisplayName As String Implements IDDNode.DisplayName
         Get
             Return IIf(_displayTableName IsNot Nothing, _displayTableName, _primaryTable)
         End Get
+        Set(value As String)
+            _displayTableName = value
+        End Set
     End Property
 
     Public Function GetChildNodeJoins() As List(Of KeyValuePair(Of DDNodeEnum, String)) Implements IDDNode.GetChildNodeJoins
@@ -32,6 +35,27 @@ Public MustInherit Class DDNodeBase
     Public Function GetNodeCriteria() As Dictionary(Of Integer, IDDCriteria) Implements IDDNode.GetNodeCriteria
         Return _criteriaList
     End Function
+
+    Dim _columnList As New List(Of KeyValuePair(Of String, String))
+    Public Sub AddColumn1(nodeName As String, columnName As String) Implements IDDNode.AddColumn
+        _columnList.Add(New KeyValuePair(Of String, String)(nodeName, columnName))
+    End Sub
+
+    Public Function GetNodeSQL() As String Implements IDDNode.GetNodeSQL
+
+        Dim outerJoinStringFormat As String = "OUTER APPLY ({0}) AS {1}"
+        Dim crossJoinStringFormat As String = "CROSS APPLY ({0}) AS {1}"
+
+        For Each n As IDDNode In Me.GetAllChildrenNodes()
+
+        Next
+
+    End Function
+
+    Public Function GetChildNodeSQL(columnMap As List(Of KeyValuePair(Of String, String)), parentNodeNameAlias As String, parentColumns() As DataColumn, childColumns() As DataColumn) As Object Implements IDDNode.GetChildNodeSQL
+
+    End Function
+
 #End Region
 
 #Region "Table Rule Configuration"
@@ -94,6 +118,17 @@ Public MustInherit Class DDNodeBase
         Public SourceName As String
         Public SourceTable As String
     End Class
+#End Region
+
+#Region "IMultiChildNode"
+    Dim _childrenNodes As New List(Of IMultiChildNode)
+    Public ReadOnly Property ChildrenNodes As List(Of IMultiChildNode) Implements IMultiChildNode.ChildrenNodes
+        Get
+            Return _childrenNodes
+        End Get
+    End Property
+
+    Public Property ParentNode As IMultiChildNode Implements IMultiChildNode.ParentNode
 #End Region
 
 End Class
