@@ -15,8 +15,6 @@
 
     Function GetNodeSQL() As String
 
-    Function GetChildNodeSQL(ByVal columnMap As List(Of KeyValuePair(Of String, String)), ByVal parentNodeNameAlias As String, ByVal parentColumns As DataColumn(), ByVal childColumns As DataColumn())
-
 End Interface
 
 Public Enum DDNodeEnum

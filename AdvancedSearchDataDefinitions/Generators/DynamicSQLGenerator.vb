@@ -8,7 +8,10 @@
 
     Public Sub AddChildNode(ByVal parentNodeName As String, ByVal nodeName As String, ByVal nodeType As DDNodeEnum)
         Dim fac = New IDDNodeFactory
-        GetNodeByName(parentNodeName).ChildrenNodes.Add(fac.GetNode(nodeType, nodeName))
+        Dim newNode = fac.GetNode(nodeType, nodeName)
+        Dim parentNode = GetNodeByName(parentNodeName)
+        newNode.ParentNode = parentNode
+        parentNode.ChildrenNodes.Add(newNode)
     End Sub
 
     Public Sub AddColumnToNode(ByVal selectedNodeName As String, ByVal nodeName As String, ByVal columnName As String)
@@ -16,10 +19,14 @@
     End Sub
 
     Public Sub GetSingleNodeDynamicSQL(ByVal nodeName)
-
+        GetNodeByName(nodeName).GetNodeSQL()
     End Sub
 
     Private Function GetNodeByName(ByVal nodeName As String) As IDDNode
+        If rootNode.DisplayName = nodeName Then
+            Return rootNode
+        End If
+
         For Each n As IDDNode In rootNode.GetAllChildrenNodes()
             If n.DisplayName = nodeName Then
                 Return n

@@ -44,15 +44,25 @@ Public MustInherit Class DDNodeBase
     Public Function GetNodeSQL() As String Implements IDDNode.GetNodeSQL
 
         Dim outerJoinStringFormat As String = "OUTER APPLY ({0}) AS {1}"
-        Dim crossJoinStringFormat As String = "CROSS APPLY ({0}) AS {1}"
+        Dim joinList As New List(Of String)
 
-        For Each n As IDDNode In Me.GetAllChildrenNodes()
-
+        For Each n As DDNodeBase In Me.GetAllChildrenNodes()
+            Dim childSelect = n.GetChildNodeSQL(Me.DisplayName)
+            joinList.Add(String.Format(outerJoinStringFormat, Me.GetChildNodeSQL(Me.DisplayName), n.DisplayName))
         Next
 
     End Function
 
-    Public Function GetChildNodeSQL(columnMap As List(Of KeyValuePair(Of String, String)), parentNodeNameAlias As String, parentColumns() As DataColumn, childColumns() As DataColumn) As Object Implements IDDNode.GetChildNodeSQL
+    Public Function GetChildNodeSQL(parentNodeNameAlias As String) As String
+        Dim columnSelectFormatString = "{0}.{1} AS {0}_{1}"
+        Dim columnAliasFormatString = "{0}({1}.{2}) AS {1}_{2}"
+
+        Dim colList As New List(Of String)
+        For Each colMatch In _columnList.Where(Function(c) c.Key = Me.DisplayName)
+            colList.Add(String.Format(columnAliasFormatString, "SUM", colMatch.Key, colMatch.Value))
+        Next
+
+        Return Nothing
 
     End Function
 
