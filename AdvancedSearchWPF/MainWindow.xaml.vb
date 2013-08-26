@@ -282,4 +282,19 @@
 
 #End Region
 
+    Private Sub RadioButton_Click(sender As Object, e As RoutedEventArgs)
+        If sender.Equals(chkSmall) Then
+            Me.Resources("FontSize-Large") = 12.0
+        End If
+        If sender.Equals(chkMedium) Then
+            Me.Resources("FontSize-Large") = 15.0
+        End If
+        If sender.Equals(chkLarge) Then
+            Me.Resources("FontSize-Large") = 18.0
+        End If
+    End Sub
+
+    Private Sub test_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of System.Double))
+        Me.Resources("FontSize-Large") = e.NewValue
+    End Sub
 End Class
