@@ -15,9 +15,8 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="110"></ColumnDefinition>
+            <ColumnDefinition Width="160"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="220"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
             <Button FontSize="{DynamicResource FontSize-Large}" Name="btn_AddNode" Content="Add Node" Click="Button_Click" Margin="10,5,10,5"></Button>
@@ -35,14 +34,12 @@
         <DockPanel Grid.Column="1">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Button FontSize="{DynamicResource FontSize-Large}" Name="btn_delete_node" Content="Delete Node" Click="btn_delete_node_Click" IsEnabled="False" Margin="10,5,10,5"></Button>
-                <Button FontSize="{DynamicResource FontSize-Large}" Name="btn_Dynamic_Generator" Content="Generate SQL" Margin="10,5,10,5"></Button>
                 <StackPanel>
                     <RadioButton Name="chkSmall" FontSize="{DynamicResource FontSize-Large}" Click="RadioButton_Click" IsChecked="True">small</RadioButton>
                     <RadioButton Name="chkMedium" FontSize="{DynamicResource FontSize-Large}" Click="RadioButton_Click">medium</RadioButton>
                     <RadioButton Name="chkLarge" FontSize="{DynamicResource FontSize-Large}" Click="RadioButton_Click">large</RadioButton>
                 </StackPanel>
-                <TextBlock FontSize="{DynamicResource FontSize-Large}">hello</TextBlock>
-                <Slider Name="test" Minimum="12" Maximum="22" Value="12" Width="100" ValueChanged="test_ValueChanged"></Slider>
+                <Slider x:Name="zoomSlider" Width="200" Minimum="0.1" Maximum="5" Value="1"/>
             </StackPanel>
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <Canvas Name="canvasNodeDisplay" 
@@ -51,37 +48,12 @@
                     Width="700"
                     MouseMove="canvasNodeDisplay_MouseMove"
                     MouseLeftButtonUp="canvasNodeDisplay_MouseLeftButtonUp">
+                    <Canvas.LayoutTransform>
+                        <ScaleTransform ScaleX="{Binding Path=Value, ElementName=zoomSlider}"
+                            ScaleY="{Binding Path=Value, ElementName=zoomSlider}"/>
+                    </Canvas.LayoutTransform>
                 </Canvas>
             </ScrollViewer>
         </DockPanel>
-        <TabControl Grid.Column="2">
-            <TabItem FontSize="{DynamicResource FontSize-Large}" Header="Columns">
-                <ItemsControl Name="lb_ColumnChooser">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Visibility="{Binding Path=TableGroupVisibility}">
-                                <Border BorderThickness="1" CornerRadius="2" BorderBrush="Black" >
-                                    <TextBlock FontSize="{DynamicResource FontSize-Large}" Text="{Binding Path=TableName}"></TextBlock>
-                                </Border>
-                                <ItemsControl ItemsSource="{Binding Path=ColumnChooserList}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Visibility="{Binding Path=ColumnVisibility}">
-                                                <CheckBox IsChecked="{Binding Path=ColumnIsSelected}" Content="{Binding Path=ColumnDisplayName}"></CheckBox>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </TabItem>
-            <TabItem FontSize="{DynamicResource FontSize-Large}" Header="Criteria">
-                <ItemsControl Name="ic_Criteria">
-
-                </ItemsControl>
-            </TabItem>
-        </TabControl>
     </Grid>
 </Window>

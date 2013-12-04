@@ -14,10 +14,6 @@
         AddNode(lb_ResourceType.SelectedItem)
     End Sub
 
-    Private Sub btn_Dynamic_Generator_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btn_Dynamic_Generator.Click
-        _manager.GenerateDynamicSQL()
-    End Sub
-
     Dim _selectedNode As Node_UC = Nothing
     Private Sub Node_Selected(ByVal sender As Node_UC, ByVal e As System.Windows.Input.MouseButtonEventArgs)
         For Each n In _manager.NodeListTop
@@ -28,11 +24,8 @@
         If sender IsNot Nothing Then
             sender.SetIsSelected(True)
         End If
-        lb_ColumnChooser.ItemsSource = Nothing
         Dim selectedIASN = _manager.NodeList.FirstOrDefault(Function(n) n.Tag.Equals(sender))
         _manager.SetSelectedNode(selectedIASN)
-        lb_ColumnChooser.ItemsSource = _manager.GetColumnItemSource()
-        ic_Criteria.ItemsSource = _manager.GetCriteriaItemSource()
         btn_delete_node.IsEnabled = _manager.CanDeleteNode(selectedIASN)
     End Sub
 
@@ -94,9 +87,6 @@
             End If
 
             _manager.EndDragDrop(_manager.NodeList.First(Function(n) n.Tag.Equals(sender)))
-            Dim o = lb_ColumnChooser.ItemsSource
-            lb_ColumnChooser.ItemsSource = Nothing
-            lb_ColumnChooser.ItemsSource = o
             UpdateNodesState()
 
             SetLineEndToCenter(_tmpConnectingLine, sender.top_part)
@@ -231,8 +221,12 @@
         Return Nothing
     End Function
 
+    Private Function ZoomSetting()
+        Return zoomSlider.Value
+    End Function
+
     Private Sub AddNode(ByVal nodetype As ResourceInfo, ByVal p As Point)
-        Dim node As Node_UC = New Node_UC(nodetype.DisplayObject)
+        Dim node As Node_UC = New Node_UC(nodetype.DisplayObject, AddressOf ZoomSetting)
         canvasNodeDisplay.Children.Add(node)
         Dim iasNode = _manager.AddNodeType(nodetype.ResourceType, node)
         node.SetNodeDisplayState(_manager.GetNodeDisplayState(iasNode))
@@ -255,8 +249,6 @@
 
     Private Shared __DefaultImagePath = "Images/Info.png"
     Private Sub InitializeSources()
-
-        ic_Criteria.ItemTemplateSelector = New CriteriaDataTemplateSelector
 
         Dim _proxyLookup As New Dictionary(Of Integer, String)
         For Each n In _manager.MyASNodeConfiguration.ASNodeConfigList

@@ -11,9 +11,10 @@
         UpadateIsSelected(state)
     End Sub
 
-
-    Public Sub New(ByVal imagePath As String)
+    Dim _tranFormGetter As Func(Of Double)
+    Public Sub New(ByVal imagePath As String, ByVal tranFormGetter As Func(Of Double))
         InitializeComponent()
+        _tranFormGetter = tranFormGetter
         iNodeImage.Source = New System.Windows.Media.Imaging.BitmapImage(New Uri(imagePath, UriKind.Relative))
         AllowMove = True
         AddHandler top_part.MouseLeftButtonDown, AddressOf Node_MouseLeftButtonDown
@@ -52,8 +53,8 @@
         If (isMyMouseCaptured) Then
             Dim deltaV As Double = e.GetPosition(Nothing).Y - mouseVerticalPosition
             Dim deltaH As Double = e.GetPosition(Nothing).X - mouseHorizontalPosition
-            Dim newTop As Double = deltaV + Me.GetValue(Canvas.TopProperty)
-            Dim newLeft As Double = deltaH + Me.GetValue(Canvas.LeftProperty)
+            Dim newTop As Double = deltaV / _tranFormGetter() + Me.GetValue(Canvas.TopProperty)
+            Dim newLeft As Double = deltaH / _tranFormGetter() + Me.GetValue(Canvas.LeftProperty)
 
             Me.SetValue(Canvas.TopProperty, newTop)
             Me.SetValue(Canvas.LeftProperty, newLeft)
